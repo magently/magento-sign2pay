@@ -1,0 +1,132 @@
+<?php
+  $merchant_id  = Mage::getStoreConfig('payment/sign2pay/merchant_id',Mage::app()->getStore());
+  $token        = Mage::getStoreConfig('payment/sign2pay/application_token',Mage::app()->getStore());
+  $customer     = Mage::getSingleton('customer/session')->getCustomer();
+  $email        = $customer->getEmail();
+?>
+
+<style type="text/css">
+  #sign2pay_container{display: none;}
+</style>
+
+<?php if(!empty($merchant_id) && !empty($token)){ ?>
+
+  <script type="text/javascript">
+
+    s2p_jq = jQuery.noConflict();
+
+    s2p_jq(function($){
+
+      $.ajax({
+        type: "GET",
+        dataType: "script",
+        url: "https://sign2pay.com/merchant.js",
+        complete: function(){
+          s2p_mage();
+        },
+        error: function(){
+          console.log("error loading merchant.js. S2P not initialized;")
+        }
+      });
+
+      //MageWorld One Step Compatabity
+      if($("#p_method_sign2pay")[0]){
+        var parent =  $("#p_method_sign2pay").parent();
+            parent.attr("id","sign2pay_container");
+        var ignoreClass =  parent.attr("class")+ " ignore";
+            parent.attr("class", ignoreClass);
+      }
+
+      s2p_mage = function(){
+
+        fetchTotal = function(callback){
+          $.ajax({
+            type    : "POST",
+            url     : "/sign2pay/index/totalPurchaseAmount/",
+            success: function (response){
+              callback(response);
+            },
+            error: function(){
+              console.log("error on fetchTotal: " + response);
+            }
+          });
+        };
+
+        generateRefId = function() {
+          var d         = new Date().getTime();
+          var email     = $('#billing\\:email').val()
+          var lastname  = $("#billing\\:lastname").val();
+          if ((email != "" && typeof(email) != 'undefined') && (lastname != "" && typeof(lastname) != 'undefined')) {
+            return  email + ',' + lastname + ',' + d;
+          } else {
+            return "leeg";
+          }
+        };
+
+        shippingAddress = function() {
+          var address = $('#billing\\:street1').val();
+          var street2 = $('#billing\\:street2').val();
+
+          if (typeof(street2) != "undefined") {
+              address += " ";
+              address += street2;
+          }
+          return address;
+        };
+        fetchEmail = function(){
+          <?php if(!empty($email)){ ?>
+            email = "<?php echo $email;?>";
+          <?php } else {?>
+            email =$("#billing\\:email").val();
+          <?php }?>
+          return email;
+        };
+
+        s2p_riskAssessment = function(){
+
+          callback = function(amount){
+            window.sign2PayOptions = {
+              merchant_id   : "<?php echo $merchant_id; ?>",
+              token         : "<?php echo $token; ?>",
+              domain        : "sign2pay.com",
+              el            : "#sign2pay_container",
+              checkout_type : "multi",
+              first_name    : $('#billing\\:firstname').val(),
+              last_name     : $('#billing\\:lastname').val(),
+              email         : fetchEmail(),
+              address       : shippingAddress(),
+              city          : $('#billing\\:city').val(),
+              country       : $('#billing\\:country_id').val(),
+              postal_code   : $('#billing\\:postcode').val(),
+              ref_id        : generateRefId(),
+              amount        : parseFloat(amount*100)
+            };
+
+            if(typeof(window.s2p.transport)!= 'undefined'){
+              window.s2p.transport.removeListener()
+              jQuery("#s2p_transport_form, #s2p_transport, .s2p_banks_wrap").hide().remove()
+            }
+            window.s2p.options.initTransport();
+          }
+          fetchTotal(callback);
+        };
+
+        $('#opc-shipping_method .button, .shipping_method_handle').on("click", function (event) {
+          s2p_riskAssessment();
+        });
+
+        //check if shipping methode is allready filled in or not
+        if ($('input[name=shipping_method]:checked').length > 0) {
+          s2p_riskAssessment();
+        }
+
+      };
+
+    });
+  </script>
+<?php }else{ ?>
+
+<script type="text/javascript">
+  console.log("The Sign2Pay Module is enabled, but you are missing required settings.");
+</script>
+<?php } ?>

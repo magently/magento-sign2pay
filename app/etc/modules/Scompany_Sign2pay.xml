@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Scompany_Sign2pay>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+              <Mage_Payment />
+            </depends>
+        </Scompany_Sign2pay>
+    </modules>
+</config>

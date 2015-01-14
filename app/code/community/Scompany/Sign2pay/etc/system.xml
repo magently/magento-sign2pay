@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <sections>
+        <payment>
+            <groups>
+                <sign2pay translate="label" module="sign2pay">
+                    <label>Sign2Pay</label>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                     <comment>
+                        <![CDATA[
+                            <link rel="stylesheet" type="text/css" href="https://s3-eu-west-1.amazonaws.com/s2p/integrations/magento/s2p_admin.css" />
+                            <style>
+                                #payment_sign2pay {
+                                  padding-bottom:3em;
+                                }
+                                #payment_sign2pay *{
+                                    box-sizing: border-box;
+                                }
+                                #payment_sign2pay .label{
+                                  font-weight:bold;
+                                }
+                                #payment_sign2pay .comment{
+                                  position:relative;
+                                }
+                                #payment_sign2pay .s2p_disclaimer{
+
+                                    font-size:0.9em;
+                                    padding:1em 1em 1em 0;
+                                    color:rgba(0,0,0,0.6);
+                                }
+                                #payment_sign2pay table.form-list{
+                                    float:left;
+                                    width:65%;
+                                    padding-left:1em;
+                                }
+
+                                #payment_sign2pay .s2p_right_col{
+                                  max-width:200px;
+                                  position:absolute;
+                                  right:1em;
+                                }
+                                #payment_sign2pay h4{
+
+                                  font-size: 1.2em;
+                                  text-transform: uppercase;
+                                  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+                                  color:#7a7a7a;
+                                  border-bottom: 1px solid #e9e9ea;
+                                  padding-bottom:3px;
+                                }
+                                #payment_sign2pay_heading_magento, #payment_sign2pay_heading_settings{
+                                  margin-bottom:1em;
+                                  max-width:70%;
+                                }
+
+                                #payment_sign2pay .form-list td.label,
+                                #payment_sign2pay .form-list td.value,
+                                #payment_sign2pay .form-list td.value2,
+                                #payment_sign2pay .form-list td.note,
+                                #payment_sign2pay .form-list td.scope-label,
+                                #payment_sign2pay .form-list td.use-default{
+                                  padding: 10px 0 !important;
+                                }
+
+                            </style>
+
+                            <div class="s2p_header">
+                                <h3 class="s2p_title">
+                                    <img src='https://s3-eu-west-1.amazonaws.com/s2p/sign2PayLogo_2x.png'/>
+                                </h3>
+
+                                <p class="s2p_byline">
+                                  Secure and easy mobile payments using your personal signature.
+                                </p>
+                              <p>
+                                With a quick and simple integration, you'll be processing Direct Debits across <a class="s2p_supported_countries" href="#countries">18 European countries</a>.
+                              </p>
+                            </div>
+                            <div class="s2p_right_col">
+                              <div class="s2p_links">
+                                <h4>Need an Account?</h4>
+                                <div class="s2p_sign_up">
+                                  <a href="https://<?php echo $this->s2p_domain; ?>" target="_blank">Sign Up</a>
+                                </div>
+                                <div class="s2p_clear"></div>
+                              </div>
+
+                              <div class="s2p_links">
+                                <h4>Merchant Login</h4>
+                                <div class="s2p_sign_in">
+                                  <a href="https://merchant.<?php echo $this->s2p_domain; ?>/profile/sign_in" target="_blank">Sign In</a>
+                                </div>
+                                <div class="s2p_clear"></div>
+                              </div>
+
+                              <div class="s2p_links">
+                                <h4>Related Links</h4>
+                                <ul>
+                                  <li>
+                                    <a href="https://merchant.sign2pay.com" target="_blank">Sign2Pay Merchant Admin</a>
+                                  </li>
+                                  <li>
+                                    <a href="https://sign2pay.com/docs/" target="_blank">Sign2Pay Documentation</a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                        ]]>
+                    </comment>
+                    <fields>
+                        <heading_magento translate="label">
+                            <label>Magento Settings</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </heading_magento>
+
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+
+                        <order_status translate="label">
+                            <label>New Order Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status>
+
+                        <complete_order_status translate="label">
+                            <label>Complete Order Status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </complete_order_status>
+
+                        <heading_settings translate="label">
+                            <label>Integration Settings</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+
+                        </heading_settings>
+
+                        <merchant_id translate="label" backend_model="adminhtml/system_config_backend_encrypted">
+                            <label>Merchant ID</label>
+                            <comment>Located on your Sign2Pay Application settings page</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </merchant_id>
+                        <application_token translate="label" backend_model="adminhtml/system_config_backend_encrypted">
+                            <label>Application Token</label>
+                            <comment>Located on your Sign2Pay Application settings page</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </application_token>
+
+                        <api_token translate="label" backend_model="adminhtml/system_config_backend_encrypted">
+                            <label>API Token</label>
+                            <comment>Located on your Sign2Pay Application settings page</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </api_token>
+                        <disclaimer>
+                            <comment>
+                                <![CDATA[
+                                    <div class="s2p_disclaimer">
+                                        <p>While we strive to support the Magento Community as best we can, we cannot guarantee this
+                                        Sign2Pay Module will work with <i>all</i> Magento Extensions. </p>
+                                        <p>Please test responsibly before implementing in your production environment if you are using a third party checkout process.</p>
+                                    </div>
+                                ]]>
+                            </comment>
+                            <frontend_type>note</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </disclaimer>
+                    </fields>
+                </sign2pay>
+            </groups>
+        </payment>
+    </sections>
+</config>

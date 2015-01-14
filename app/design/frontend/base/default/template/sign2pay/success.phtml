@@ -1,0 +1,113 @@
+<?php
+// Get the order id
+$order_id = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+
+// Set the order model
+$order = Mage::getModel('sales/order');
+// Load the order with the successful order id
+$order->loadByIncrementId($order_id);
+// Get the order grand total
+$paymethode = $order->getPayment()->getMethodInstance()->getCode();
+
+$email = "";
+
+
+if ($order->getCustomerId() === NULL) {
+    $email = $order->getBillingAddress()->getEmail();
+} else {
+    $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+    $email = $customer->getDefaultBillingAddress()->getEmail();
+}
+$billing_address_data = $order->getBillingAddress();
+?>
+
+<?php if ($paymethode == "sign2pay"):
+    // $merchant = unserialize(Mage::getStoreConfig("payment/sign2pay/merchant"));
+    $merchant_id = Mage::getStoreConfig('payment/sign2pay/merchant_id', Mage::app()->getStore());
+    $token = Mage::getStoreConfig('payment/sign2pay/application_token', Mage::app()->getStore());
+
+    ?>
+
+    <style type="text/css">
+        .main {
+            position: relative;
+        }
+
+    </style>
+    <script>
+
+
+        var html = '' +
+            '<div id="sign2pay_overlay" >' +
+            '<div id="loading"><h1>sign2pay </h1>' +
+            '<div id="returnValue"></div>' +
+           ' <span>'+
+            '<img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Please wait while loading payment information...') ?>" title="<?php echo $this->__('Please wait while loading payment information...') ?>" class="v-middle" /> <?php echo $this->__('Please wait while loading payment information...') ?>'+
+           ' </span></div>'+
+            '</div>' +
+
+            '<div id="sign2pay"></div>';
+        jQuery('.main').append(html);
+        jq = jQuery.noConflict();
+
+        jQuery(document).ready(function ($) {
+            sleep();
+            function sleep() {
+                if (typeof(window.s2p) !== "undefined") {
+                window.sign2PayOptions = {
+                    merchant_id: "<?php echo $merchant_id;?>",
+                    token: "<?php echo $token;?>",
+                    checkout_type: 'single',
+                    domain : "sign2pay.com",
+                    map:{
+                        first_name: "<?php echo $billing_address_data['firstname']; ?>",
+                        last_name: "<?php echo $billing_address_data['lastname']; ?>",
+                        email: "<?php echo $billing_address_data['email']; ?>",
+                        address: "<?php echo $billing_address_data['street']; ?>",
+                        postal_code: "<?php echo $billing_address_data['postcode']; ?>",
+                        city: "<?php echo $billing_address_data['city']; ?>",
+                        country: "<?php echo $billing_address_data['country_id']; ?>",
+                        amount: "<?php echo $order->getGrandTotal(); ?>",
+                        ref_id: "<?php echo $order_id ?>"
+                    }
+                };
+
+                (function() {
+                    var s = document.createElement("script");
+                    s.type = "text/javascript";
+                    s.src = "https://sign2pay.com/merchant.js";
+                    s.async = true;
+                    t = document.getElementsByTagName('script')[0];
+                    t.parentNode.insertBefore(s, t);
+                })();
+
+                }
+
+            }
+
+            jQuery.ajax({
+                type: "POST",
+                url: "<?php echo $this->getBaseUrl()?>sign2pay/index/optionDetail/",
+                data:"id=1" ,
+                success: function(msg)
+                {
+                    var data = JSON.parse(msg);
+                    jq("#returnValue").html(data.name);
+                },
+                error: function(response){
+                    console.log(response);
+                }
+            });
+
+        });
+
+
+    </script>
+
+
+
+<?php
+endif;
+?>
+
+
