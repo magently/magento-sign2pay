@@ -58,7 +58,7 @@
             <sign2pay>
                 <active>0</active>
                 <model>sign2pay/sign2pay</model>
-                <order_status>pending</order_status>
+                <order_status>pending_payment</order_status>
 		<complete_order_status>processing</complete_order_status>
                 <title>Sign2Pay</title>
                 <payment_action>sale</payment_action>

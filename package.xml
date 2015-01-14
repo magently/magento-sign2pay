@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>Sign2Pay_Mobile_Payments</name>
-    <version>0.4.3</version>
+    <version>0.5.0</version>
     <stability>beta</stability>
     <license>S-Company Commercial License</license>
     <channel>community</channel>
@@ -12,13 +12,17 @@
 Analysing hundreds of data points in a single signature, Sign2Pay provides the same level of security as fingerprint or facial recognition. Our technology works across all major platforms, covers over 3 700 banks across 18 European countries and supports all touch enabled devices.&#xD;
 &#xD;
 Compatible with: 1.7, 1.8, 1.9</description>
-    <notes>Fixes: URLs to Merchant Admin now work.&#xD;
-Improved the order of admin fields.&#xD;
-Added comments to explain various settings.</notes>
-    <authors><author><name>S-Company</name><user>S-Company</user><email>info@s-company.be</email></author><author><name>Sign2Pay</name><user>Sign2Pay</user><email>team@sign2pay.com</email></author></authors>
-    <date>2014-12-04</date>
-    <time>16:02:28</time>
-    <contents><target name="magecommunity"><dir name="Scompany"><dir name="Sign2pay"><dir name="Block"><dir name="Form"><file name="Sign2pay.php" hash="f0a94b58f0f9d0a7cbe2fbf862fe26a4"/></dir><dir name="Info"><file name="Sign2pay.php" hash="a5c9b052b14bc1f10d5b5c3a9c5b3c62"/></dir></dir><dir name="Helper"><file name="Data.php" hash="f5efbbd379122552fc534fcea9b42931"/></dir><dir name="Model"><dir name="Model"><dir name="System"><dir name="Config"><dir name="Source"><file name="OnepageTypes.php" hash="a539985b802a51b01644ebcf458612d9"/></dir></dir></dir></dir><file name="Sign2pay.php" hash="c66e34e21c06dd7ff69bfe2a14d2e275"/></dir><dir name="controllers"><file name="IndexController.php" hash="7d93cdd9df9aaa53db555bd35e2d9ece"/><file name="PaymentController.php" hash="56fbec6e5a75c3c82d714f8fb29a79a4"/></dir><dir name="etc"><file name="config.xml" hash="f59a2296ec924f3018cb98c376fdf455"/><file name="system.xml" hash="cedefbdcb15c1345b7a322568687988e"/></dir><file name=".DS_Store" hash="a9849c47fe9384e0ab84cb5139fe90b0"/></dir><file name=".DS_Store" hash="9b957e3ec28e2562ed0185907125c052"/></dir></target><target name="mageetc"><dir name="modules"><file name="Scompany_Sign2pay.xml" hash="76419176d0f0535201007dba7fbed120"/></dir></target><target name="magedesign"><dir name="frontend"><dir name="base"><dir name="default"><dir name="layout"><file name="sign2pay.xml" hash="d4fdc0a3917eb5c8f8e93ae23159dc8b"/></dir><dir name="template"><dir name="sign2pay"><dir name="checkout"><file name="methods.phtml" hash="a6ab5c3f16379d80370d7d8cf16b2f4c"/></dir><dir name="form"><file name="sign2pay.phtml" hash="85fbfa56297e36eebed2757392fa965f"/></dir><file name="onepage_core.phtml" hash="09b892a3a306a2d6a7b3345c86faca76"/><file name="redirect.phtml" hash="189ae6d44dbe39fd8f2cd38512b2c0df"/><file name="success.phtml" hash="841994e80c79733f6be6bcc012211ebd"/></dir></dir></dir></dir></dir></target></contents>
+    <notes>Added:&#xD;
+&#xD;
+When a customer cancels the Sign2Pay screen, the order is marked as Cancelled and a new cart is created based on the order. The customer can then choose a different payment method or try again.&#xD;
+&#xD;
+Fixed:&#xD;
+&#xD;
+Minor updates to the admin screens.</notes>
+    <authors><author><name>Sign2Pay</name><user>Sign2Pay</user><email>team@sign2pay.com</email></author></authors>
+    <date>2015-01-14</date>
+    <time>09:34:49</time>
+    <contents><target name="magecommunity"><dir name="Scompany"><dir name="Sign2pay"><dir name="Block"><dir name="Form"><file name="Sign2pay.php" hash="f0a94b58f0f9d0a7cbe2fbf862fe26a4"/></dir><dir name="Info"><file name="Sign2pay.php" hash="a5c9b052b14bc1f10d5b5c3a9c5b3c62"/></dir></dir><dir name="Helper"><file name="Data.php" hash="f5efbbd379122552fc534fcea9b42931"/></dir><dir name="Model"><dir name="Model"><dir name="System"><dir name="Config"><dir name="Source"><file name="OnepageTypes.php" hash="a539985b802a51b01644ebcf458612d9"/></dir></dir></dir></dir><file name="Sign2pay.php" hash="c66e34e21c06dd7ff69bfe2a14d2e275"/></dir><dir name="controllers"><file name="IndexController.php" hash="7d93cdd9df9aaa53db555bd35e2d9ece"/><file name="PaymentController.php" hash="f467abe178b00d4c302841e7e01a0ea9"/></dir><dir name="etc"><file name="config.xml" hash="f20d07b0a39199ddd1b7c1c176fd3e99"/><file name="system.xml" hash="bd737fca91ea8fa696646ffbe6370989"/></dir><file name=".DS_Store" hash="a9849c47fe9384e0ab84cb5139fe90b0"/></dir><file name=".DS_Store" hash="9b957e3ec28e2562ed0185907125c052"/></dir></target><target name="mageetc"><dir name="modules"><file name="Scompany_Sign2pay.xml" hash="76419176d0f0535201007dba7fbed120"/></dir></target><target name="magedesign"><dir name="frontend"><dir name="base"><dir name="default"><dir name="layout"><file name="sign2pay.xml" hash="d4fdc0a3917eb5c8f8e93ae23159dc8b"/></dir><dir name="template"><dir name="sign2pay"><dir name="checkout"><file name="methods.phtml" hash="a6ab5c3f16379d80370d7d8cf16b2f4c"/></dir><dir name="form"><file name="sign2pay.phtml" hash="85fbfa56297e36eebed2757392fa965f"/></dir><file name="onepage_core.phtml" hash="09b892a3a306a2d6a7b3345c86faca76"/><file name="redirect.phtml" hash="9e614a497fc877141d7d0c697951c063"/><file name="success.phtml" hash="841994e80c79733f6be6bcc012211ebd"/></dir></dir></dir></dir></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>5.3.0</min><max>6.0.0</max></php></required></dependencies>
 </package>

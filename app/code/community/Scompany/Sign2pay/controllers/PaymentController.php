@@ -90,16 +90,27 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
       }
     }
 
-    // The cancel action is triggered when an order is to be cancelled
+    // The cancel action is triggered when the popup is closed.
     public function cancelAction()
     {
-      Mage::log('canelAction who is calling this!  ', null, 'sign2pay.log');
-      if (Mage::getSingleton('checkout/session')->getLastRealOrderId()) {
-          $order = Mage::getModel('sales/order')->loadByIncrementId(Mage::getSingleton('checkout/session')->getLastRealOrderId());
-          if ($order->getId()) {
-              $this->cancelOrder($order->getId());
-          }
+      Mage::log('cancelAction who is calling this!  ', null, 'sign2pay.log');
+      $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+      $order = Mage::getSingleton('sales/order')->loadByIncrementId($orderId);
+
+      if($order->canCancel()) {
+        $order->cancel()->save();
       }
+
+      $cart = Mage::getModel('checkout/cart');
+      $cart->init();
+      foreach($order->getAllVisibleItems() as $item):
+        $cart->addProduct($item->getProductId(), $item->getQtyOrdered());
+      endforeach;
+      $cart->save();
+
+      Mage::getSingleton('checkout/session')->setCartWasUpdated(true);
+      Mage::getSingleton('checkout/session')->addError("You've cancelled the Sign2Pay screen.");
+      Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'))->sendResponse();
     }
 
     private function cancelOrder($orderId)

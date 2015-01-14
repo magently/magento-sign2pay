@@ -99,6 +99,9 @@
             success:function(){
               $(".s2p-button-text").addClass("button btn-cart").html("Pay with Sign2Pay");
               $(".loading").hide();
+            },
+            close:function(){
+              window.location = "/sign2pay/payment/cancel";
             }
           };
           window.s2p.options.initTransport();
@@ -110,7 +113,7 @@
 (function() {
     var s = document.createElement("script");
     s.type = "text/javascript";
-    s.src = "//sign2pay.com/merchant.js";
+    s.src = "https://sign2pay.com/merchant.js";
     s.async = true;
     t = document.getElementsByTagName('script')[0];
     t.parentNode.insertBefore(s, t);
