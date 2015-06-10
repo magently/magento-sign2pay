@@ -28,8 +28,6 @@ The Sign2Pay iOS SDK simplifies 3 tasks:
 * Perform the Sign2Pay risk assessment
 * Present the Sign2Pay overlay to kick off the payment process
 
-[iOS documentation](/integrations/ios/index.html)
-
 ## Magento
 
 We’re consistently looking for ways to make the integration of Sign2Pay easier for merchants. With this in mind, we’ve developed a few Payment Modules to connect Sign2Pay to your eCommerce platform via downloadable, integrated plugins.
