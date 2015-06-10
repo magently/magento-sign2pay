@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Integrations
+title: Merchant signup
 ---
 
 # Merchant signup
