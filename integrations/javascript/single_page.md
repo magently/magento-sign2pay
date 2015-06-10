@@ -3,6 +3,13 @@ layout: default
 title: Single Page checkout
 ---
 
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/integrations/index.html">Integrations</a></li>
+  <li><a href="/integrations/javascript/index.html">JavaScript</a></li>
+  <li>Single Page</li>
+</ol>
+
 # Single Page Checkout Javascript
 
 You’ll use the Single Page integration if: your customers enter their contact and shipping details on the same page they will select a payment method from. or returning users do not enter shipping information as it is already saved in their account info. and all required variables can be populated by parsing the DOM or calcuated via js function.

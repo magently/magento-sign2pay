@@ -3,6 +3,13 @@ layout: default
 title: Multi Page checkout
 ---
 
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/integrations/index.html">Integrations</a></li>
+  <li><a href="/integrations/javascript/index.html">JavaScript</a></li>
+  <li>Multi Page</li>
+</ol>
+
 # Multi Page Checkout Javascript
 
 You’ll use the Multi Page integration if:

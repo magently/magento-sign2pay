@@ -6,10 +6,10 @@ title: JavaScript integration
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
   <li><a href="/integrations/index.html">Integrations</a></li>
-  <li>JavaScript</li>
+  <li>iOS</li>
 </ol>
 
-# JavaScript integration
+# iOS integration
 
 We have two different versions of the JavaScript integration.
 

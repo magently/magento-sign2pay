@@ -3,6 +3,11 @@ layout: default
 title: Integrations
 ---
 
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li>Integrations</li>
+</ol>
+
 # Integrations
 
 To get started with Sign2Pay, choose the integration type that best fits your needs. Using the credentials given to you in your Sign2Pay Merchant Admin, you can easily setup secure communication between your checkout page(s) and S2P.

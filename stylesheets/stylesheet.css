@@ -245,3 +245,14 @@ a {
 @media screen and (max-width: 42em) {
   .site-footer {
     font-size: 0.9rem; } }
+
+.breadcrumb {
+  margin-left: 0;
+  padding-left: 0;
+}
+.breadcrumb li {
+    display: inline;
+}
+.breadcrumb li+li:before {
+    content:"» ";
+}

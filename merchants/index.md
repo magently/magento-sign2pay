@@ -3,6 +3,11 @@ layout: default
 title: Merchant signup
 ---
 
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li>Merchant Signup</li>
+</ol>
+
 # Merchant signup
 
 The Sign2Pay Merchant Admin is your home for reporting, application and purchase management.

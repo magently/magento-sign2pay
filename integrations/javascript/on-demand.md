@@ -3,6 +3,13 @@ layout: default
 title: On Demand JavaScript
 ---
 
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/integrations/index.html">Integrations</a></li>
+  <li><a href="/integrations/javascript/index.html">JavaScript</a></li>
+  <li>On Demand</li>
+</ol>
+
 # On Demand Javascript
 
 If you want/need control over when to initiate the Sign2Pay Risk Assessment, it is possible to call it from your own js, providing that all required param values are available.

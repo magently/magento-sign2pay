@@ -3,6 +3,13 @@ title: Sign2Pay JavaScript callbacks
 layout: default
 ---
 
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/integrations/index.html">Integrations</a></li>
+  <li><a href="/integrations/javascript/index.html">JavaScript</a></li>
+  <li>Callbacks</li>
+</ol>
+
 # JavaScript Callbacks
 
 ## success
