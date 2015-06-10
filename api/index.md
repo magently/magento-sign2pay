@@ -26,6 +26,6 @@ A payout contains the details for all line items in your ledger that have been r
 
 ## Refund API
 
-Create a refund A Purchase ID is required to create a refund.
+Create a refund. A Purchase ID is required to create a refund.
 
 [Refunds](refunds.html)
