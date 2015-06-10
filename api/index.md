@@ -20,7 +20,7 @@ Add new or update existing Merchant Applications
 
 ## Payouts
 
-Payouts A payout contains the details for all line items in your ledger that have been remitted for payment.
+A payout contains the details for all line items in your ledger that have been remitted for payment.
 
 [Payouts](payouts.html)
 
