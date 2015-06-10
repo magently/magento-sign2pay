@@ -2,7 +2,13 @@
 layout: default
 ---
 
+# Getting started
+
 <img src="/images/logo-blue.png">
+
+On this website you'll find documentation that will teach you how to use Sign2Pay, and reference materials for using our payment method from your own backend code.
+
+## Topics
 
 [Merchant signup](/merchants/index.html) describes the on-boarding process for new merchants. If you work with e-commerce and want to start accepting payments with us, start there.
 
