@@ -35,14 +35,23 @@ A line item is an entry in your Merchant Ledger that represents a transaction. T
 
 # GET
 
-Fetches payout object details.
+Fetches payout object details based on date OR payout_type.
+
+## Payout by Date
+
+{% highlight bash %}
+https://sign2pay.com/api/v2/reports/payouts/date/[date]
+{% endhighlight %}
+(_date format: 2015-04-14_)
+
+Passing a date param  will return payouts generated on that date, or an empty array if none exist.
+
+## Payout by Type
 
 {% highlight bash %}
 https://sign2pay.com/api/v2/reports/payouts/[payout_type]
 
 {% endhighlight %}
-
-## Payout types
 
 | Type          | Description
 | --------------|------------
