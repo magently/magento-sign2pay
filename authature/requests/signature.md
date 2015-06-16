@@ -1,0 +1,40 @@
+---
+title: Requesting a Signature
+layout: default
+---
+
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/authature">Authature</a></li>
+  <li><a href="/authature/requests/index.html">Requests</a></li>
+  <li>Requesting a Signature</li>
+</ol>
+
+#Requesting Signature Image Data
+
+> This is an authenticated request.
+
+Send a client authenticated request to retrieve the image data associated to the access_token to display the signature or embed within a document.
+
+###Endpoint
+
+    https://app.sign2pay.com/oauth/signature
+
+###Authorization Header
+
+    Authorization: Basic [encodes credentials client_id, client_secret]
+
+###Request
+
+    GET https://app.sign2pay.com/oauth/signatures/[access_token]
+
+###Response
+
+    {
+      "image_data": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIiB3aWR0aD0iNTQ2IiBoZWlnaHQ9IjE1MyI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTSA0IDExMCBjIC0wLjA1IDAuMTggLTIuNDIgNi43NCAtMyAxMCBjIC0wLjM5IDIuMTkgLTAuNTMgNS4yNCAwIDcgYyAwLjMyIDEuMDcgMS45MSAyLjc4IDMgMyBjIDMuMDkgMC42MiA4LjU5IDEuMTkgMTIgMCBjIDEwLjY4IC0zLjcyIDIzLjg0IC05LjEzIDM0IC0xNiBjIDI3LjIxIC0xOC4zOCA1My4xMyAtMzkuOTEgODAgLTYxIGMgNC43MyAtMy43MSA5LjI1IC04IDEzIC0xMiBjIDAuOTUgLTEuMDEgMi4wMyAtNC4wNyAyIC00IGMgLTAuMTcgMC4zOSAtNi4zMyAxNC41MyAtMTAgMjIgYyAtNS4yOSAxMC43OSAtMTEuMyAyMC4yNyAtMTYgMzEgYyAtNC43MyAxMC44IC04LjIgMjEuNiAtMTIgMzMgYyAtMi4zNiA3LjA5IC00LjU0IDE0LjE5IC02IDIxIGMgLTAuNDcgMi4xOCAtMC44MSA1LjkyIDAgNyBjIDAuNzEgMC45NCA0LjIxIDEuMzQgNiAxIGMgNi4xMyAtMS4xOCAxMy42NyAtMy4zMyAyMCAtNiBjIDguNTQgLTMuNjEgMTcuMDEgLTguMSAyNSAtMTMgYyA2LjY5IC00LjExIDE5IC0xNCAxOSAtMTQiLz48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNIDE5MCAxNDIgYyAwLjI4IC0wLjA3IDExLjAyIC0xLjkzIDE2IC00IGMgMTIuNDIgLTUuMTYgMjQuODUgLTExLjIxIDM3IC0xOCBjIDEzLjkzIC03Ljc4IDI2Ljc2IC0xNS45IDQwIC0yNSBjIDE0LjAzIC05LjY1IDI3LjMxIC0xOS4xMyA0MCAtMzAgYyAxMC43NyAtOS4yMyAyMC40NSAtMTkuNDMgMzAgLTMwIGMgNi4yNiAtNi45MyAxMi4xNiAtMTQuNTEgMTcgLTIyIGMgMi4yNiAtMy41IDUuMSAtMTIuMiA1IC0xMiBjIC0wLjI2IDAuNTIgLTguODEgMTkuOTUgLTE0IDMwIGMgLTUuNzUgMTEuMTQgLTEyLjM4IDIxLjMyIC0xOCAzMiBjIC0wLjk3IDEuODQgLTIuOSA1Ljk1IC0yIDYgYyAyOS4wMiAxLjcyIDE5MC41NyA1LjkzIDIwNCA2IGwgLTcgLTUiLz48L3N2Zz4="
+    }
+
+###Response Headers
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json; charset=utf-8

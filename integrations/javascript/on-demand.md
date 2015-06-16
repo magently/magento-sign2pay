@@ -37,8 +37,7 @@ jQuery(document).ready(function($) {
           city: "Anytown",
           country: "BE",
           domain: "sign2pay.com",
-          email: "example@gmail.com
-",
+          email: "example@gmail.com",
           first_name: "Pink",
           last_name: "Floyd",
           postal_code: "2018",
