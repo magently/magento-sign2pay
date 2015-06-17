@@ -16,27 +16,27 @@ layout: default
 
 Verify that you are able to use a users access_token to make a payment request _before_ capturing the actual payment.
 
-###Endpoint
+##Endpoint
 
     https://app.sign2pay.com/api/v2/payment/authorize
 
-###Authorization Header
+##Authorization Header
 
     Authorization: Bearer [access_token you are validating]
 
-###Request
+##Request
 
     POST https://app.sign2pay.com/api/v2/payment/authorize
     client_id=[your authature client id]
     &device_uid=[unique id for this device]
 
-###Response
+##Response
 
     {
       "authorization_id":"55802ad24e696337a5140000"
     }
 
-###Response Headers
+##Response Headers
 
     HTTP/1.1 201 OK
     Content-Type: application/json; charset=utf-8

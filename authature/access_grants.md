@@ -14,11 +14,11 @@ layout: default
 Requesting a users authorization take the form of a uri with the request parameters uri encoded.
 
 
-###Endpoint
+##Endpoint
 
     https://app.sign2pay.com/oauth/authorize
 
-###Request
+##Request
 
     GET https://app.sign2pay.com/oauth/authorize?
     client_id=[your authature client id]
@@ -30,7 +30,7 @@ Requesting a users authorization take the form of a uri with the request paramet
 
 ---
 
-###Response
+##Response
 
 When the redirect uri represents a native application, the authorization is returned as a json object. Otherwise, it will be sent as a redirect to the uri provided.
 
@@ -40,7 +40,7 @@ When the redirect uri represents a native application, the authorization is retu
     }
 
 
-####Response Headers
+###Response Headers
 
     HTTP/1.1 200 OK
     Content-Type: application/json; charset=utf-8
@@ -50,3 +50,7 @@ When the redirect uri represents a native application, the authorization is retu
 
 - [User Parameters](/authature/user_params.html)
 - [UX Style](/authature/ux_styles.html)
+
+##Errors
+
+[Reponses](/authature/error_responses.html)

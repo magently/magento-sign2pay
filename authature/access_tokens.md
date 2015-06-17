@@ -15,15 +15,15 @@ layout: default
 
 Exchanging Authorization Code for an Access Token
 
-###Endpoint
+##Endpoint
 
     https://app.sign2pay.com/oauth/token
 
-###Authorization Header
+##Authorization Header
 
     Authorization: Basic [encodes credentials client_id, client_secret]
 
-###Request
+##Request
 
 
     POST https://app.sign2pay.com/oauth/token
@@ -36,7 +36,7 @@ Exchanging Authorization Code for an Access Token
 
 ---
 
-###Response
+##Response
 
     "access_token": {
       "token": "87724f208bc194ca9e5e66d556de53a5e5d08d7de55327000793e6a7c80009e4",
@@ -50,7 +50,11 @@ Exchanging Authorization Code for an Access Token
       "expires": "2025-06-16T10:48:24.025+00:00"
     }
 
-###Response Headers
+##Response Headers
 
     HTTP/1.1 201 OK
     Content-Type: application/json; charset=utf-8
+
+##Errors
+
+[Reponses](/authature/error_responses.html)

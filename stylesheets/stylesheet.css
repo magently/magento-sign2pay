@@ -277,14 +277,19 @@ a {
   width:182px;
 }
 
+.main-content .link-lists{
+  margin-top:2rem;
+}
+
 .main-content ul.link-list{
   width:31%;
   padding:0;
   margin:0;
   margin-bottom: 2rem;
-
   margin-right: 0.5rem;
   float: left;
+  padding-right:0.5rem;
+
 }
 
 .main-content ul.link-list li{
@@ -445,3 +450,8 @@ width: 288.25px;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
 }
+
+table {
+  display: table;
+  width:100%;
+  }

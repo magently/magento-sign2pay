@@ -11,7 +11,7 @@ title: Scopes
 
 #Scopes
 
-###Signature Capture
+##Signature Capture
 
 Use Authature for simple signature capture.
 
@@ -21,7 +21,7 @@ Use Authature for simple signature capture.
 
 - - -
 
-###Authentication
+##Authentication
 
 Similar to "Login with Facebook" ~ except _way_ cooler.
 
@@ -31,7 +31,7 @@ Similar to "Login with Facebook" ~ except _way_ cooler.
 
 - - -
 
-###Payments
+##Payments
 
 Authature provides for two seperate payment related scopes - Preapproval & Payment.
 
@@ -39,4 +39,3 @@ Authature provides for two seperate payment related scopes - Preapproval & Payme
   read more >
 </a>
 
-- - -

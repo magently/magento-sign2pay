@@ -14,19 +14,17 @@ layout: default
 
 > This call is under development and subject to change
 
-> This is an authenticated request.
-
 An authenticated client can make a request to capture a payment using an access token anytime as long as the access token is authorized for "preapproval". An *amount* attribute is required for this request.
 
-###Endpoint
+##Endpoint
 
     https://app.sign2pay.com/api/v2/payment/capture/:authorization_id
 
-###Authorization Header
+##Authorization Header
 
     Authorization: Basic [encodes credentials client_id, client_secret]
 
-###Request
+##Request
 
     POST token=[access_token]
     &device_uid=[unique id for device making request]
@@ -34,8 +32,13 @@ An authenticated client can make a request to capture a payment using an access 
     &ref_id=[your order/transaction id]
     &amount=1000
 
-###Response
+##Response
 
     {
       "purchase_id":"55802ad24e696337a5140000"
     }
+
+##Response Headers
+
+    HTTP/1.1 201 OK
+    Content-Type: application/json; charset=utf-8

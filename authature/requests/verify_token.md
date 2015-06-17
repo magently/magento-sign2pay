@@ -14,28 +14,32 @@ layout: default
 
 You can quickly check the validity of a users access token
 
-###Endpoint
+##Endpoint
 
     https://app.sign2pay.com/oauth/token
 
-###Authorization Header
+##Authorization Header
 
     Authorization: Bearer [access_token you are validating]
 
-###Request
+##Request
 
     GET https://app.sign2pay.com/oauth/token?
     client_id=c509fd593742b6b08adf4f0b41a4801c
     &scope=authenticate
     &device_uid=[unique id for device making request]
 
-###Response
+##Response
 
     {
       "status": "ok"
     }
 
-###Response Headers
+##Response Headers
 
     HTTP/1.1 200 OK
     Content-Type: application/json; charset=utf-8
+
+##Errors
+
+[Reponses](/authature/error_responses.html)

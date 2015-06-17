@@ -15,7 +15,7 @@ Use Authature for simple signature capture. Facilitate the signing of documents 
 
 By granting authorization for this scope, you will be able to use their access token to retrieve the image data to display their signature or embed within a document. Basic contact detail is returned as part of the token response.
 
-###Request
+##Request
 
 <pre><code>https://app.sign2pay.com/oauth/authorize?
 client_id=[your authature client id]
@@ -26,7 +26,7 @@ client_id=[your authature client id]
 &amp;scope=<strong>capture</strong>
 </code></pre>
 
-###Response
+##Response
 
 <pre>
 <code>{
@@ -42,12 +42,16 @@ client_id=[your authature client id]
 }</code>
 </pre>
 
-###Response Headers
+##Response Headers
 
     HTTP/1.1 201 OK
     Content-Type: application/json; charset=utf-8
 
-###Options
+##Options
 
 - [User Parameters](/authature/user_params.html)
 - [UX Style](/authature/ux_styles.html)
+
+##Errors
+
+[Reponses](/authature/error_responses.html)

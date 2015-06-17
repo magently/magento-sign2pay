@@ -14,7 +14,7 @@ layout: default
 
 For browser based implementations, you have the option of displaying the signature UI as an iframe that overlays the current page OR to link directly to a popup window. Both have their advantages, but it's your call. This param defaults to "inline"
 
-###Inline
+##Inline
 
     GET https://app.sign2pay.com/oauth/authorize?
     client_id=[your authature client id]
@@ -25,7 +25,7 @@ For browser based implementations, you have the option of displaying the signatu
     &scope=authenticate
     &ux_style=inline
 
-###Pop-up
+##Pop-up
 
     GET https://app.sign2pay.com/oauth/authorize?
     client_id=[your authature client id]

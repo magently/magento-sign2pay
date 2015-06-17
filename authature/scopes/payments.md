@@ -21,7 +21,11 @@ Originally dubbed as, _Payments Like Uber_, this scope allows the **user** to li
 
 The payment scope is closest to a traditional e-commerce model where the user is in a checkout flow, and payment is authorised and captured in one go.
 
-###Options
+##Options
 
 - [User Parameters](/authature/user_params.html)
 - [UX Style](/authature/ux_styles.html)
+
+##Errors
+
+[Reponses](/authature/error_responses.html)

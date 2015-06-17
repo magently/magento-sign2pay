@@ -16,7 +16,7 @@ Similar to "Login with Facebook", Authature can be used to provide user authenti
 
 By granting authorization for this scope, the user authenticates their signature and you'll receive their basic contact detail as part of the token response.
 
-###Request
+##Request
 
 <pre><code>https://app.sign2pay.com/oauth/authorize?
 client_id=[your authature client id]
@@ -27,7 +27,7 @@ client_id=[your authature client id]
 &amp;scope=<strong>authenticate</strong>
 </code></pre>
 
-###Response
+##Response
 
 When the redirect uri represents a native application, the authorization is returned as a json object. Otherwise, it will be sent as a redirect to the uri provided.
 
@@ -42,3 +42,7 @@ When the redirect uri represents a native application, the authorization is retu
 
 - [User Parameters](/authature/user_params.html)
 - [UX Style](/authature/ux_styles.html)
+
+##Errors
+
+[Reponses](/authature/error_responses.html)

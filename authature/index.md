@@ -22,9 +22,6 @@ title: Authature
   <img src="/images/authature/4.rotate.png">
 </div>
 
-
-
-
 #Authature
 
 <div class="tagline">
@@ -33,7 +30,7 @@ title: Authature
 
 Authature provides the ability for an app owner to capture, login/authenticate, pre-approve payments, or pay - all via secure signature within their application or website.
 
-At it’s core, Authature is modelled after the [OAuth 2.0 Spec](https://tools.ietf.org/html/rfc6749) (RFC 6749), with the obvious difference that instead of logging in and granting permission, the user is asked to verify their signature thereby granting access to the client requesting access on behalf of the user.
+At it’s core, Authature is modelled after the <a href="https://tools.ietf.org/html/rfc6749" target="_blank">OAuth 2.0 Spec (RFC 6749)</a>, with the obvious difference that instead of logging in and granting permission, the user is asked to verify their signature thereby granting access to the client requesting access on behalf of the user.
 
 We can wait for you to try it out, but Authature is currently in closed beta. If you have not received an invite, [drop us a line](mailto:hello@sign2pay.com?subject=Authature Beta Access) to request access.
 
@@ -45,58 +42,63 @@ We can wait for you to try it out, but Authature is currently in closed beta. If
 As soon as you have your access credentials, you can get started by creating your first Authature client by
 <a onclick="alert('Sorry, but this is a closed beta for now')">signing in</a> to your client admin. Links to all of the information you should need are listed below, but as always, should you need help, don't hesitate to [let us know](mailto:support@sign2pay.com?subject=Authature Assistance).
 
-<ul class="link-list">
-  <li class="link-list-title">General</li>
-  <li>
-    <a href="/authature/sdks/index.html">SDKs</a>
-  </li>
-  <li>
-    <a href="/authature/user_params.html">User Params</a>
-  </li>
-  <li>
-    <a href="/authature/ux_styles.html">UX Style</a>
-  </li>
+<div class="link-lists">
+  <ul class="link-list">
+    <li class="link-list-title">General</li>
+    <li>
+      <a href="/authature/sdks/index.html">SDKs</a>
+    </li>
+    <li>
+      <a href="/authature/error_responses.html">Errors</a>
+    </li>
 
-</ul>
+    <li>
+      <a href="/authature/user_params.html">User Params</a>
+    </li>
+    <li>
+      <a href="/authature/ux_styles.html">UX Style</a>
+    </li>
 
-
-<ul class="link-list">
-  <li class="link-list-title">OAuth Guides</li>
-  <li>
-    <a href="/authature/clients.html">Authature Client Applications</a>
-  </li>
-  <li>
-    <a href="/authature/scopes/index.html">Authorization Scopes</a>
-  </li>
-  <li>
-    <a href="/authature/access_grants.html">Request Authorization</a>
-  </li>
-  <li>
-    <a href="/authature/access_tokens.html">Access Tokens</a>
-  </li>
-</ul>
+  </ul>
 
 
-<ul class="link-list">
-  <li class="link-list-title">Authenticated Requests</li>
+  <ul class="link-list">
+    <li class="link-list-title">OAuth Guides</li>
+    <li>
+      <a href="/authature/clients.html">Authature Client Applications</a>
+    </li>
+    <li>
+      <a href="/authature/scopes/index.html">Authorization Scopes</a>
+    </li>
+    <li>
+      <a href="/authature/access_grants.html">Request Authorization</a>
+    </li>
+    <li>
+      <a href="/authature/access_tokens.html">Access Tokens</a>
+    </li>
+  </ul>
 
-  <li>
-    <a href="/authature/requests/pre_auth.html">Authorize a Payment</a>
-  </li>
 
-  <li>
-    <a href="/authature/requests/payment.html">Capture a Payment</a>
-  </li>
+  <ul class="link-list">
+    <li class="link-list-title">Authenticated Requests</li>
 
-  <li>
-    <a href="/authature/requests/verify_token.html">Verify an Access Token</a>
-  </li>
+    <li>
+      <a href="/authature/requests/pre_auth.html">Authorize a Payment</a>
+    </li>
 
-  <li>
-    <a href="/authature/requests/signature.html">Request Signature Image</a>
-  </li>
-</ul>
+    <li>
+      <a href="/authature/requests/payment.html">Capture a Payment</a>
+    </li>
 
+    <li>
+      <a href="/authature/requests/verify_token.html">Verify an Access Token</a>
+    </li>
+
+    <li>
+      <a href="/authature/requests/signature.html">Request Signature Image</a>
+    </li>
+  </ul>
+</div>
 <script type="text/javascript">
   (function() {
     $(function() {

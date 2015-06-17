@@ -16,7 +16,7 @@ Depending on your needs, you may have collected information for your users that 
 
 By identifying the user in advance, they will get to signing sooner! If you have it, send it.
 
-###Request
+##Request
 
     GET https://app.sign2pay.com/oauth/authorize?
     client_id=[your authature client id]
