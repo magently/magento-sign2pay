@@ -40,7 +40,7 @@ We can wait for you to try it out, but Authature is currently in closed beta. If
 
 
 As soon as you have your access credentials, you can get started by creating your first Authature client by
-<a onclick="alert('Sorry, but this is a closed beta for now')">signing in</a> to your client admin. Links to all of the information you should need are listed below, but as always, should you need help, don't hesitate to [let us know](mailto:support@sign2pay.com?subject=Authature Assistance).
+[signing in](mailto:hello@sign2pay.com?subject=Authature Beta Access:Let me In!) to your client admin. Links to all of the information you should need are listed below, but as always, should you need help, don't hesitate to [let us know](mailto:support@sign2pay.com?subject=Authature Assistance).
 
 <div class="link-lists">
   <ul class="link-list">
