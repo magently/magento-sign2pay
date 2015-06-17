@@ -3,12 +3,26 @@ layout: authature
 title: Authature
 ---
 
+<p style="text-align:center; float:right;">
+  <a class="btn btn-flat btn-labeled btn-info btn-lg btn-quick text-lg text-slim" data-ux="inline">
+    <span class="btn-label icon fa fa-lock"></span>
+    <span class="sk-text">
+      Login with
+      <strong>Authature</strong>
+    </span>
+  </a>
+</p>
+
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
   <li>Authature</li>
 </ol>
 
-# Authature
+<div class="sign-thumb">
+  <img src="/images/authature/4.rotate.png">
+</div>
+
+#Authature
 
 > Imagine a password that stays secure, even when you share it.
 
@@ -18,17 +32,11 @@ At it’s core, Authature is modelled after the [OAuth 2.0 Spec](https://tools.i
 
 We can wait for you to try it out, but Authature is currently in closed beta. If you have not received an invite, [drop us a line](mailto:hello@sign2pay.com?subject=Authature Beta Access) to request access.
 
+
+
 ##Getting Started
 
-<p style="text-align:center">
-  <a class="btn btn-flat btn-labeled btn-info btn-lg btn-quick text-lg text-slim" data-ux="inline">
-    <span class="btn-label icon fa fa-lock"></span>
-    <span class="sk-text">
-      Login with
-      <strong>Authature</strong>
-    </span>
-  </a>
-</p>
+
 As soon as you have your access credentials, you can get started by creating your first Authature client by
 <a onclick="alert('Sorry, but this is a closed beta for now')">signing in</a> to your client admin. Links to all of the information you should need are listed below, but as always, should you need help, don't hesitate to [let us know](mailto:support@sign2pay.com?subject=Authature Assistance).
 
