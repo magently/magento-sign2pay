@@ -27,3 +27,38 @@ layout: default
 |invalid_token|The access token was revoked, has expired, or is invalid|400
 
 
+#Authorize & Capture Error Responses
+
+| Error             | Error Description               | Code     |
+|:------------------|:--------------------------------| --------:|
+|HAS_A_VERIFIED_ACCOUNT| Sorry, but you will need to verify your bank account with us before being able to use Sign2Pay again. Keep an eye on your transaction records for a transfer from us. It will have a verification pin in the remarks.|403
+|HAS_NO_ACCOUNTS_FLAGGED_FOR_REVIEW|Sorry, but an account of yours is currently being reviewed for fraud.|403
+|BELOW_GLOBAL_TRANSACTION_LIMIT|Sorry, but the amount of your purchase is higher than S2P is processing at the moment.|403
+|BELOW_CONSUMER_TRANSACTION_LIMIT|Sorry, but the amount of your purchase is higher than is currently allowed by by your account.|403
+|DEVICE_NOT_FLAGGED|Sorry, but this device is currently being reviewed for fraud.|403
+|CONSUMER_EMAIL_VALID|Your email address appears to be invalid.|403
+|CONSUMER_HAS_NO_FLAGGED_DEVICES|Sorry, but one of your devices is currently being reviewed for fraud.|403
+|BELOW_FRAUD_RISK_SCORE_THRESHOLD|Sorry, but computer says no...|403
+|BELOW_GLOBAL_VELOCITY_LIMIT|Sorry, but computer says too soon!|403
+|BELOW_CONSUMER_VELOCITY_LIMIT|Sorry, but computer says too soon!|403
+|MERCHANT_RISK_SCORE_THRESHOLD|This merchant has been disabled|403
+|MERCHANT_ENABLED|This merchant has been disabled|403
+|MERCHANT_PAYMENTS_ENABLED|Sign2Pay Payment processing has been disabled|403
+|CONSUMER_NOT_BANNED|We're sorry, but this account cannot be used with Sign2Pay|403
+|GLOBAL_PAYMENTS_ENABLED|Sign2Pay Payment processing has been disabled|403
+|BELOW_CONSUMER_DAILY_LIMIT|Sorry, but you've reached your daily limit for Sign2Pay transactions.|403
+|GENERIC_FAIL_MESSAGE|We are currently unable to process this transaction. Please select an alternative payment method.|403
+
+
+
+
+
+
+
+
+
+
+
+
+
+
