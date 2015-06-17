@@ -366,23 +366,20 @@ white-space: nowrap;
 width: 288.25px;
 
 }
-.btn-quick{
+.btn-quick, .btn-quick:active{
   -webkit-box-shadow: none;
   -webkit-user-select: none;
   background-color: rgb(78, 187, 219);
-
   border:1px solid rgb(57, 179, 215);
   border-bottom: 3px solid rgb(37, 150, 184);
-
   color: rgb(255, 255, 255);
   cursor: pointer;
   display: inline-block;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 23px;
+  font-size: 18px;
   font-weight: 300;
   height: 41px;
   line-height: 19px;
-
   outline-color: rgb(255, 255, 255);
   outline-style: none;
   outline-width: 0px;
@@ -440,3 +437,11 @@ width: 288.25px;
     width:100%;
 
   }
+
+.main-content .tagline{
+  font-style: italic;
+  font-size:1.25rem;
+  color:rgba(0,0,0,0.4);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}

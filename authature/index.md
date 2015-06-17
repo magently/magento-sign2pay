@@ -22,9 +22,14 @@ title: Authature
   <img src="/images/authature/4.rotate.png">
 </div>
 
+
+
+
 #Authature
 
-> Imagine a password that stays secure, even when you share it.
+<div class="tagline">
+  "Imagine a password that stays secure, even when you share it."
+</div>
 
 Authature provides the ability for an app owner to capture, login/authenticate, pre-approve payments, or pay - all via secure signature within their application or website.
 
@@ -104,15 +109,12 @@ As soon as you have your access credentials, you can get started by creating you
         state: '60208d752c576baad4839fa4ef401472d735f2e160af8d78342f5af8b0bd537b',
         device_uid: 'f815c953ad712af1448679b90a4973e5a8544e4a886f686ed901654aa3f0b143',
         complete: function() {
-          alert("You're now logged in!");
+          alert("Authature Complete");
         }
       };
       $(".btn-quick").on("click", function(e) {
-        var authatureClient, button;
+        var authatureClient;
         e.preventDefault();
-        button = new window.spinkitButton({
-          el: $(this)
-        });
         config.scope = "authenticate";
         config.ux_style = "popup";
         return authatureClient = new window.authature.Client(config);
