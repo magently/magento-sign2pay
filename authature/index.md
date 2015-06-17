@@ -30,9 +30,9 @@ title: Authature
 
 Authature provides the ability for an app owner to capture, login/authenticate, pre-approve payments, or pay - all via secure signature within their application or website.
 
-At it’s core, Authature is modelled after the <a href="https://tools.ietf.org/html/rfc6749" target="_blank">OAuth 2.0 Spec (RFC 6749)</a>, with the obvious difference that instead of logging in and granting permission, the user is asked to verify their signature thereby granting access to the client requesting access on behalf of the user.
+At its core, Authature is modelled after the <a href="https://tools.ietf.org/html/rfc6749" target="_blank">OAuth 2.0 Spec (RFC 6749)</a>, with the obvious difference that instead of logging in and granting permission, the user is asked to verify their signature thereby granting access to the client requesting access on behalf of the user.
 
-We can wait for you to try it out, but Authature is currently in closed beta. If you have not received an invite, [drop us a line](mailto:hello@sign2pay.com?subject=Authature Beta Access) to request access.
+We can't wait for you to try it out, but Authature is currently in closed beta. If you have not received an invite, [drop us a line](mailto:hello@sign2pay.com?subject=Authature Beta Access) to request access.
 
 
 
