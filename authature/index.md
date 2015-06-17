@@ -25,14 +25,14 @@ title: Authature
 #Authature
 
 <div class="tagline">
-  "Imagine a password that stays secure, even when you share it."
+  "A password that stays secure, even when you share it."
 </div>
 
-Authature provides the ability for an app owner to capture, login/authenticate, pre-approve payments, or pay - all via secure signature within their application or website.
+Authature allows an app owner to capture, login/authenticate, pre-approve payments, or pay—all via secure signature within an application or website.
 
-At its core, Authature is modelled after the <a href="https://tools.ietf.org/html/rfc6749" target="_blank">OAuth 2.0 Spec (RFC 6749)</a>, with the obvious difference that instead of logging in and granting permission, the user is asked to verify their signature thereby granting access to the client requesting access on behalf of the user.
+Modelled after the <a href="https://tools.ietf.org/html/rfc6749" target="_blank">OAuth 2.0 Spec (RFC 6749)</a>, Authature is different in that instead of entering a password, the user is asked to authenticate their signature.
 
-We can't wait for you to try it out, but Authature is currently in closed beta. If you have not received an invite, [drop us a line](mailto:hello@sign2pay.com?subject=Authature Beta Access) to request access.
+Authature is currently in closed beta, but we look forward to you trying it out. If you have not received an invite, [drop us a line](mailto:hello@sign2pay.com?subject=Authature Beta Access) to request access.
 
 
 
@@ -40,7 +40,7 @@ We can't wait for you to try it out, but Authature is currently in closed beta. 
 
 
 As soon as you have your access credentials, you can get started by creating your first Authature client by
-[signing in](mailto:hello@sign2pay.com?subject=Authature Beta Access:Let me In!) to your client admin. Links to all of the information you should need are listed below, but as always, should you need help, don't hesitate to [let us know](mailto:support@sign2pay.com?subject=Authature Assistance).
+[signing into](mailto:hello@sign2pay.com?subject=Authature Beta Access:Let me In!) to your client admin. Links to all of the information you should need are listed below, but should you need additional help, don’t hesitate to [let us know](mailto:support@sign2pay.com?subject=Authature Assistance).
 
 <div class="link-lists">
   <ul class="link-list">
