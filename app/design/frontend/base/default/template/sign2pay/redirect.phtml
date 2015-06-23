@@ -1,0 +1,125 @@
+<style>
+.initializing{
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+.loading{
+  margin: 0 auto 1.5em;
+  width:30px;
+}
+
+.s2p_banks_wrap{
+    width:50px;
+    margin: 0 auto 1em;
+}
+.s2p_banks_wrap img{
+  width:50px;
+}
+</style>
+
+<div class="initializing">
+  <h1>Sign2Pay </h1>
+  <div id="sign2pay" style="display: block !important;">
+    <div class='s2p-button-banks'>
+      <img class="loading" src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>"
+            title="<?php echo $this->__('Please wait while loading payment information...') ?>"
+        />
+    </div>
+
+    <span class='s2p-button-text'>
+      Thank you for your order.
+      <br/>
+      We are now initializing Sign2Pay to authorize your payment.
+    </span>
+  </div>
+</div>
+
+<?php
+  // Get the order id
+  $order_id = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+  // Set the order model
+  $order = Mage::getModel('sales/order');
+  // Load the order with the successful order id
+  $order->loadByIncrementId($order_id);
+  // Get the paymentmethod
+  $paymentmethod = $order->getPayment()->getMethodInstance()->getCode();
+
+  $email = "";
+
+  if ($order->getCustomerId() === NULL) {
+    $email = $order->getBillingAddress()->getEmail();
+  } else {
+    $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+    $email = $customer->getDefaultBillingAddress()->getEmail();
+  }
+  $billing_address_data = $order->getBillingAddress();
+?>
+
+<?php if ($paymentmethod == "sign2pay"):
+  $merchant_id  = Mage::getStoreConfig('payment/sign2pay/merchant_id', Mage::app()->getStore());
+  $token        = Mage::getStoreConfig('payment/sign2pay/application_token', Mage::app()->getStore());
+?>
+
+<?php $address = $billing_address_data->getStreet1();
+  if ($billing_address_data->getStreet2()){
+    $address .= ' ' . $billing_address_data->getStreet2();
+  }
+?>
+
+<script>
+
+  (function() {
+    s2p_jq = jQuery.noConflict();
+
+    s2p_jq(function($){
+
+      var mySleep=setInterval(function(){sleep()},3000);
+
+      function sleep(){
+        if(typeof(window.s2p) !== "undefined" ){
+
+          window.clearInterval(mySleep);
+
+          window.sign2PayOptions = {
+            merchant_id: "<?php echo $merchant_id;?>",
+            token: "<?php echo $token;?>",
+            checkout_type: 'multi',
+            domain : "sign2pay.com",
+            launch: "on_load",
+            first_name: "<?php echo $billing_address_data['firstname']; ?>",
+            last_name: "<?php echo $billing_address_data['lastname']; ?>",
+            email: "<?php echo $billing_address_data['email']; ?>",
+            address: "<?php echo $address; ?>",
+            postal_code: "<?php echo $billing_address_data['postcode']; ?>",
+            city: "<?php echo $billing_address_data['city']; ?>",
+            country: "<?php echo $billing_address_data['country_id']; ?>",
+            amount: parseFloat(<?php echo $order->getGrandTotal(); ?>*100),
+            ref_id: "<?php echo $order_id ?>",
+            map:{},
+            success:function(){
+              $(".s2p-button-text").addClass("button btn-cart").html("Pay with Sign2Pay");
+              $(".loading").hide();
+            },
+            close:function(){
+              window.location = "/sign2pay/payment/cancel";
+            }
+          };
+          window.s2p.options.initTransport();
+        }
+      }
+    });
+  })();
+
+(function() {
+    var s = document.createElement("script");
+    s.type = "text/javascript";
+    s.src = "https://sign2pay.com/merchant.js";
+    s.async = true;
+    t = document.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(s, t);
+})();
+</script>
+
+<?php
+endif;
+?>
