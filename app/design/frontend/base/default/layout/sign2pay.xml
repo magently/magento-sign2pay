@@ -1,34 +1,14 @@
 <?xml version="1.0"?>
 <layout version="0.3.9">
 
-    <default>
-        <reference name="head">
-          <block before="-" type="core/text" name="addjquery">
-              <action method="setText" ifconfig="payment/sign2pay/includeJquery" ifvalue="1">
-                  <text>
-                      <![CDATA[
-                      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-                      <script>jQuery.noConflict();</script>
-                      ]]>
-                  </text>
-              </action>
-          </block>
+    <sign2pay_payment_redirect>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
-    </default>
-
-    <checkout_onepage_index>
 
         <reference name="content">
-          <block type="sign2pay/form_sign2pay" name="sign2pay_core" template="sign2pay/onepage_core.phtml"/>
+            <block type="sign2pay/redirect"></block>
         </reference>
+    </sign2pay_payment_redirect>
 
-    </checkout_onepage_index>
-
-    <checkout_onepage_paymentmethod>
-        <reference name="root">
-          <action method="setTemplate">
-              <template>sign2pay/checkout/methods.phtml</template>
-          </action>
-      </reference>
-    </checkout_onepage_paymentmethod>
 </layout>
