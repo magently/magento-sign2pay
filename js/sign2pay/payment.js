@@ -39,21 +39,10 @@
         Sign2Pay.prototype.initTransport = function(options) {
             window.sign2PayOptions = options;
 
-            console.log(options);
-
             if (!this.scriptAttached) {
                 this.scriptAttached = true;
                 $('head').append('<script type="text/javascript" src="https://sign2pay.com/merchant.js" async></script>');
             }
-
-            function run() {
-                if (typeof window.s2p !== 'object') {
-                    setTimeout(run, 400);
-                } else {
-                    window.s2p.options.initTransport();
-                }
-            }
-            run();
         }
 
         /**
@@ -70,7 +59,7 @@
                 dataType: 'json',
                 success: function(options) {
                     var options = $.extend(self.defaultOptions, options, {
-                        merchantId: self.merchantId,
+                        merchant_id: self.merchantId,
                         token: self.token
                     });
 
