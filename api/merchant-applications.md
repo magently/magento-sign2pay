@@ -13,15 +13,15 @@ layout: default
 
 You are encouraged to create one or more application per merchant directly in the merchant create method. Provide a separate application for each storefront. Every application must have it’s own implementation and postback URL.
 
-| Attribute         | Required            | Description                         |
-| ----------------- |:---------------:| ------------------------------------|
-| name       | yes          | Storefront name
-| description       | yes   | Displays on Payment UI under your Application name
-| logo              | no    | Brands the Payment UI. Provide as a publicly reachable URL and we'll handle grabbing it. (Aim for a square!)
-| ref_id            | no    | If you are integrating multiple applications, pass your own ID to reference back to the site you’re integrating.
-| implementation_url  | yes   | URL where the requests will originate
-| postback_url        | no    | URL where Sign2Pay should post payment details
-| mode                | no    | test, live, fail, archived, defaults to test
+| Attribute           | Required  | Description                         |
+| ------------------- |:---------:| ------------------------------------|
+| name                | no        | Storefront name
+| description         | no        | Displays on Payment UI under your Application name
+| logo                | no        | Brands the Payment UI. Provide as a publicly reachable URL and we'll handle grabbing it. (Aim for a square!)
+| ref_id              | no        | If you are integrating multiple applications, pass your own ID to reference back to the site you’re integrating.
+| implementation_url  | yes       | URL where the requests will originate
+| postback_url        | no        | URL where Sign2Pay should post payment details
+| mode                | no        | test, live, fail, archived, defaults to test
 
 To create applications for an existing merchant, you must use Token authentication. After signup you will have received an API access token to authenticate with. It is important that this access token is kept strictly private. If it ever becomes compromised, you must revoke the old access token and generate a new one as soon as possible.
 
