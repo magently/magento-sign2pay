@@ -80,6 +80,11 @@
             var self = this;
 
             var callback = function(options) {
+                options['success'] = function() {
+                    // Disable the Sign2Pay payment method
+                    $('input[name="payment[method]"][value="sign2pay"]').removeAttr('disabled');
+                }
+
                 self.initTransport(options);
             }
 
