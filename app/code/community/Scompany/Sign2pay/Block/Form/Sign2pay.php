@@ -8,7 +8,9 @@ class Scompany_Sign2pay_Block_Form_Sign2pay extends Mage_Payment_Block_Form
         // This block might not be constructed
         // with whole magento layout
         if (Mage::app()->getLayout()->getBlock('head')) {
-            Mage::helper('sign2pay')->attachPaymentScripts();
+            Mage::app()->getLayout()->getBlock('content')->append(
+                Mage::app()->getLayout()->createBlock('sign2pay/riskAssessment')
+            );
         }
     }
 

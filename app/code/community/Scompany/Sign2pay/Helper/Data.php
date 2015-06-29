@@ -24,12 +24,6 @@ class Scompany_Sign2pay_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::app()->getLayout()->getBlock('head')->addJs('sign2pay/jquery.min.js');
         Mage::app()->getLayout()->getBlock('head')->addJs('sign2pay/payment.js');
 
-        Mage::app()->getLayout()->getBlock('head')->append(
-            Mage::app()->getLayout()->createBlock('core/text')->setText(
-                '<script type="text/javascript" src="https://sign2pay.com/merchant.js"></script>'
-            )
-        );
-
         $options = $additional + $this->getSign2PayOptions();
         $options['baseUrl'] = Mage::getBaseUrl();
 

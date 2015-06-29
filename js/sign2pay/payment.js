@@ -32,6 +32,31 @@
         }
 
         /**
+         * Initialize Sign2Pay transport with given options
+         *
+         * @param object options
+         */
+        Sign2Pay.prototype.initTransport = function(options) {
+            window.sign2PayOptions = options;
+
+            console.log(options);
+
+            if (!this.scriptAttached) {
+                this.scriptAttached = true;
+                $('head').append('<script type="text/javascript" src="https://sign2pay.com/merchant.js" async></script>');
+            }
+
+            function run() {
+                if (typeof window.s2p !== 'object') {
+                    setTimeout(run, 400);
+                } else {
+                    window.s2p.options.initTransport();
+                }
+            }
+            run();
+        }
+
+        /**
          * Fetches all payment related options
          *
          * @param function callback
@@ -66,8 +91,7 @@
             var self = this;
 
             var callback = function(options) {
-                window.sign2PayOptions = options;
-                window.s2p.options.initTransport();
+                self.initTransport(options);
             }
 
             this.fetchPaymentOptions(callback);
@@ -91,8 +115,7 @@
                     window.location = self.baseUrl + "sign2pay/payment/cancel";
                 }
 
-                window.sign2PayOptions = options;
-                window.s2p.options.initTransport();
+                self.initTransport(options);
             }
 
             this.fetchPaymentOptions(callback);
@@ -101,22 +124,21 @@
         return Sign2Pay;
     })();
 
-    $(document).ready(function() {
-        $('#opc-shipping_method .button, .shipping_method_handle').on("click", function (event) {
-            window.sign2pay.riskAssessment();
-        });
-
-        //check if shipping methode is allready filled in or not
-        if ($('input[name=shipping_method]:checked').length > 0) {
-            window.sign2pay.riskAssessment();
-        }
-    });
-
     $(window).load(function() {
         if (!s2pOptions || !s2pOptions['merchantId'] || !s2pOptions['token']) {
             throwError('The Sign2Pay Module is enabled, but you are missing required settings.');
         } else {
             window.sign2pay = new Sign2Pay(s2pOptions);
+        }
+
+        if (typeof payment === 'object') {
+            payment.addBeforeInitFunction('sign2pay', function(a) {
+                // Perform risk assessment
+                window.sign2pay.riskAssessment();
+
+                // Disable the Sign2Pay payment method
+                $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
+            });
         }
     });
 
