@@ -9,7 +9,8 @@ class Scompany_Sign2pay_Model_Sign2pay extends Mage_Payment_Model_Method_Abstrac
     protected $_canUseInternal          = true;
     protected $_canUseForMultishipping  = false;
 
-    public function getOrderPlaceRedirectUrl() {
+    public function getOrderPlaceRedirectUrl()
+    {
         return Mage::getUrl('sign2pay/payment/redirect', array('_secure' => true));
     }
 }

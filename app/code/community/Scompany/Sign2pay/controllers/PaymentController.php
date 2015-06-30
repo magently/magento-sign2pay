@@ -19,77 +19,20 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
     /**
      * Response action is triggered when your gateway sends
      * back a response after processing the customer's payment
-     *
-     * @todo Add gateway authentication
-     * @todo Add order state validation
      */
     public function responseAction()
     {
-        $request = $this->getRequest();
-
-        $apiKey =  Mage::getStoreConfig('payment/sign2pay/api_token', Mage::app()->getStore());
-
-        $orderId    = $request->getPost('ref_id');
-        $merchantId = $request->getPost('merchant_id');
-        $purchaseId = $request->getPost('purchase_id');
-        $refId      = $request->getPost('ref_id');
-        $amount     = $request->getPost('amount');
-        $status     = $request->getPost('status');
-        $token      = $request->getPost('token');
-        $timestamp  = $request->getPost('timestamp');
-        $signature  = $request->getPost('signature');
-
-        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-
-        if ($this->verifyResponse($apiKey, $token, $timestamp, $signature) && $status == 'mandate_valid') {
-            // Payment was successful, so update the order's state
-            // and send order email and move to the success page
-            $redirect = Mage::getBaseUrl() . 'sign2pay/payment/success';
-
-            $order->setState(
-                Mage_Sales_Model_Order::STATE_PROCESSING,
-                true,
-                'Sign2pay has authorized the payment. with ID = ' . $purchaseId
-            );
-
-            $order->sendNewOrderEmail();
-            $order->setEmailSent(true);
-
-            $order->save();
-
-            $arr = array('status' => "success",
-                'redirect_to' => $redirect,
-                'params' => array(
-                    "total" => $amount,
-                    "id" => $refId,
-                    "purchase_id" => $purchaseId,
-                    "signature" => true,
-                    "status" => $status,
-                    "authorization" => $timestamp
-                )
-            );
-        } else {
-            // There is a problem in the response we got
-            $redirect = Mage::getBaseUrl() . 'sign2pay/payment/failure';
-
-            $order->cancel()->setState(
-                Mage_Sales_Model_Order::STATE_CANCELED,
-                true,
-                'Sign2pay has declined the payment.'
-            )->save();
-
-            $arr = array('status' => "failure",
-                'redirect_to' => $redirect,
-                'params' => array(
-                    "ref_id" => $refId,
-                    "message" => "Sorry, but we could not process your payment at this time. Your Order is still Pending.",
-                )
-            );
+        if (!$this->getRequest()->isPost()) {
+            return;
         }
 
-        $anwser = json_encode($arr);
-        $anwser = str_replace("\\/", "/", $anwser);
-        echo $anwser;
+        try {
+            $data = $this->getRequest()->getPost();
+            Mage::getModel('sign2pay/processor')->processRequest($data);
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->getResponse()->setHttpResponseCode(500);
+        }
     }
 
     /**
@@ -130,18 +73,6 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
             Mage::getSingleton('checkout/session')->addError("You've cancelled the Sign2Pay screen.");
         }
         $this->_redirect('checkout/cart');
-    }
-
-    /**
-     * Veritfy the gateway response
-     */
-    protected function verifyResponse($api_key, $token, $timestamp, $signature)
-    {
-        return $signature === hash_hmac(
-            "sha256",
-            $timestamp . $token,
-            $api_key
-        );
     }
 
     /**
