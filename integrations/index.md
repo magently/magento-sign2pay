@@ -33,3 +33,9 @@ The Sign2Pay iOS SDK simplifies 3 tasks:
 We’re consistently looking for ways to make the integration of Sign2Pay easier for merchants. With this in mind, we’ve developed a few Payment Modules to connect Sign2Pay to your eCommerce platform via downloadable, integrated plugins.
 
 [Magento documentation](/integrations/magento/index.html)
+
+# Testing
+
+After you've setup the integration, it's time to test. Any new application will default to being in test mode. This means that money will not be processed. It also means that we won't check for a mobile device . This way you can test using a desktop browser too. For production applications, Sign2Pay only works on mobile devices.
+
+[Read about testing](/integrations/testing.html)
