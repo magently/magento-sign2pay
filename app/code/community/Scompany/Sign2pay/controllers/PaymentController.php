@@ -12,6 +12,11 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
         $session->unsQuoteId();
         $session->unsRedirectUrl();
 
+        $order_id = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+        $order = Mage::getModel('sales/order')->loadByIncrementId($order_id);
+        $order->setState(Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()));
+        $order->save();
+
         $this->loadLayout();
         $this->renderLayout();
     }
@@ -38,7 +43,7 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
     /**
      * Success action after gateway response
      */
-    public function  successAction()
+    public function successAction()
     {
         $session = Mage::getSingleton('checkout/session');
         $session->setQuoteId($session->getSign2payQuoteId(true));
@@ -49,7 +54,7 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
     /**
      * Failure action after gateway response
      */
-    public function  failureAction()
+    public function failureAction()
     {
         $session = Mage::getSingleton('checkout/session');
         $session->setQuoteId($session->getSign2payQuoteId(true));
@@ -59,6 +64,8 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
 
     /**
      * When a customer cancel payment from Sign2Pay.
+     *
+     * @todo This should be processed by the payment processor
      */
     public function cancelAction()
     {
@@ -77,6 +84,8 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
 
     /**
      * Fetch payment related options required to process Sign2Pay payment
+     *
+     * @todo Check if this should process also order
      */
     public function fetchPaymentOptionsAction()
     {

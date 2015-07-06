@@ -1,14 +1,24 @@
 <?php
 class Scompany_Sign2pay_Block_Redirect extends Mage_Core_Block_Template
 {
+    /**
+     * @var Mage_Sales_Model_Order
+     */
     protected $_order;
 
-    protected function _construct()
+    /**
+     * Set apropriate template, attach sign2pay scripts
+     */
+    protected function _prepareLayout()
     {
+        parent::_prepareLayout();
+
         $this->setTemplate('sign2pay/redirect.phtml');
         Mage::helper('sign2pay')->attachPaymentScripts(array(
             'initialize' => true
         ));
+
+        return $this;
     }
 
     /**
@@ -29,6 +39,8 @@ class Scompany_Sign2pay_Block_Redirect extends Mage_Core_Block_Template
 
     /**
      * Get order
+     *
+     * @return Mage_Sales_Model_Order
      */
     public function getOrder()
     {

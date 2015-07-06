@@ -134,6 +134,7 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
             ->registerCaptureNotification(
                 $this->getRequestData('amount') / 100
             );
+        $this->_order->setState(Mage::getStoreConfig('payment/sign2pay/complete_order_status', Mage::app()->getStore()));
         $this->_order->save();
 
         // notify customer
@@ -145,6 +146,8 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
             ->setIsCustomerNotified(true)
             ->save();
         }
+
+        return $this;
     }
 
     /**
@@ -158,6 +161,8 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
                 false
             )
             ->save();
+
+        return $this;
     }
 
     /**
@@ -171,5 +176,7 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
             ->setIsTransactionClosed(true)
             ->registerPaymentReviewAction(Mage_Sales_Model_Order_Payment::REVIEW_ACTION_DENY, false);
         $this->_order->save();
+
+        return $this;
     }
 }

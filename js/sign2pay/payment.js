@@ -105,6 +105,10 @@
                     $(".s2p-button-text").addClass("button btn-cart").html("Pay with Sign2Pay");
                     $(".loading").hide();
                 };
+                options['error']  = function() {
+                    alert('There was a problem during Sign2Pay initialization. Your ref_id is ' + options['ref_id'] + '.');
+                    $(".loading").hide();
+                };
                 options['close'] = function() {
                     window.location = self.baseUrl + "sign2pay/payment/cancel";
                 }
