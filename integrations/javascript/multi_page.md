@@ -21,10 +21,6 @@ The Multi Page integration looks similar to the Single Page one, however, each o
 
 First paste your JavaScript snippet on the checkout page. You’ll find the snippet on your [Merchant Applications](https://merchant.sign2pay.com/merchant_applications) page.
 
-## THE MAP OBJECT
-
-The map object within sign2PayOptions provides the means for us to parse your page for values either by providing css selectors OR if a js function is provided, we’ll call it and use the return value. The function approach is useful say if your site/application stores the amount in euros.
-
 {% highlight javascript %}
 <script>// <![CDATA[
   window.sign2PayOptions = {
