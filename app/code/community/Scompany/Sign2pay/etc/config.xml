@@ -84,5 +84,8 @@
                 </sign2pay>
             </updates>
         </layout>
+        <secure_url>
+            <sign2pay_payment_redirect>/sign2pay/payment/redirect</sign2pay_payment_redirect>
+        </secure_url>
     </frontend>
 </config>

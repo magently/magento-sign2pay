@@ -19,6 +19,9 @@
             this.token = settings.token || throwError('No token');
             this.baseUrl = settings.baseUrl || throwError('No base url');
 
+            // Remove protocol from base url
+            this.baseUrl = this.baseUrl.replace(/^http:/, '');
+
             if (settings.initialize) this.initializePayment();
         }
 
