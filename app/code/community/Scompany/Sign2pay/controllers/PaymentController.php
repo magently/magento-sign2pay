@@ -12,8 +12,8 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
         $session->unsQuoteId();
         $session->unsRedirectUrl();
 
-        $order_id = Mage::getSingleton('checkout/session')->getLastRealOrderId();
-        $order = Mage::getModel('sales/order')->loadByIncrementId($order_id);
+        $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         $order->setState(Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()));
         $order->save();
 
@@ -90,7 +90,16 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
     public function fetchPaymentOptionsAction()
     {
         $session = Mage::getSingleton('checkout/session');
-        $quote = Mage::getModel('sales/quote')->load($session->getSign2payQuoteId() ? $session->getSign2payQuoteId() : $session->getQuoteId());
+        $quote = null;
+
+        if ($orderId = $session->getLastRealOrderId()) {
+            $order = Mage::getModel('sales/order')->loadByIncrementId($order);
+            $quote = $order->getQuote();
+        }
+
+        if (!$quote) {
+            $quote = Mage::getModel('sales/quote')->load($session->getSign2payQuoteId() ? $session->getSign2payQuoteId() : $session->getQuoteId());
+        }
 
         $billaddress = $quote->getBillingAddress();
 
@@ -103,8 +112,13 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
         $options['city']           = $billaddress->getCity();
         $options['country']        = $billaddress->getCountry();
         $options['postal_code']    = $billaddress->getPostcode();
-        $options['ref_id']         = ($options['email'] && $options['last_name']) ? ($options['email'] . ',' + $options['last_name'] . ',' . time()) : 'leeg';
         $options['amount']         = $quote->getGrandTotal() * 100;
+
+        if ($orderId = $quote->getReservedOrderId()) {
+            $options['ref_id']     = $orderId;
+        } else {
+            $options['ref_id']     = ($options['email'] && $options['last_name']) ? ($options['email'] . ',' + $options['last_name'] . ',' . time()) : 'leeg';
+        }
 
         $jsonData = json_encode($options);
         $this->getResponse()->setHeader('Content-type', 'application/json');

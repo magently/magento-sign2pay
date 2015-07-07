@@ -46,9 +46,9 @@ class Scompany_Sign2pay_Block_Redirect extends Mage_Core_Block_Template
     {
         if (!$this->_order) {
             // Get the order id
-            $order_id = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+            $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
             // Set the order model
-            $this->_order = Mage::getModel('sales/order')->loadByIncrementId($order_id);
+            $this->_order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         }
 
         return $this->_order;

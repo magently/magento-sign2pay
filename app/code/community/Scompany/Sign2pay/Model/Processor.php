@@ -56,9 +56,7 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
         $this->_order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
 
         if (!$this->_order->getId()) {
-            Mage::app()->getResponse()
-                ->setHeader('HTTP/1.1','503 Service Unavailable')
-                ->sendResponse();
+            throw new Exception('Requested order with id ' . $orderId . ' does not exists.');
         }
 
         $result = array();
@@ -99,7 +97,7 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
             );
         }
 
-        $jsonData = json_encode($answer);
+        $jsonData = json_encode($result);
         Mage::app()->getResponse()->setHeader('Content-type', 'application/json');
         Mage::app()->getResponse()->setBody($jsonData);
         Mage::app()->getResponse()->sendResponse();
