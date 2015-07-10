@@ -4,7 +4,7 @@ class Scompany_Sign2pay_Block_RiskAssessment extends Mage_Core_Block_Template
 {
     protected $_order;
 
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this->setTemplate('sign2pay/riskassessment.phtml');
