@@ -4,6 +4,12 @@ class Scompany_Sign2pay_Block_Form_Sign2pay extends Mage_Payment_Block_Form
     protected function _construct()
     {
         parent::_construct();
+        $this->setTemplate('sign2pay/form/sign2pay.phtml');
+    }
+
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
 
         // This block might not be constructed
         // with whole magento layout

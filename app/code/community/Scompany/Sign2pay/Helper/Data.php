@@ -4,6 +4,36 @@ class Scompany_Sign2pay_Helper_Data extends Mage_Core_Helper_Abstract
 {
 
     /**
+     * Retrive Sign2Pay merchant id.
+     *
+     * @return string
+     */
+    public function getSign2payMerchantId()
+    {
+        return Mage::getStoreConfig('payment/sign2pay/merchant_id',Mage::app()->getStore());
+    }
+
+    /**
+     * Retrive Sign2Pay token.
+     *
+     * @return string
+     */
+    public function getSign2payToken()
+    {
+        return Mage::getStoreConfig('payment/sign2pay/application_token',Mage::app()->getStore());
+    }
+
+    /**
+     * Retrive Sign2Pay api key.
+     *
+     * @return string
+     */
+    public function getSign2payApiKey()
+    {
+        return Mage::getStoreConfig('payment/sign2pay/api_token',Mage::app()->getStore());
+    }
+
+    /**
      * Retrive sign2pay options.
      *
      * @return array
@@ -11,8 +41,22 @@ class Scompany_Sign2pay_Helper_Data extends Mage_Core_Helper_Abstract
     public function getSign2PayOptions()
     {
         return array(
-            'merchantId' => Mage::getStoreConfig('payment/sign2pay/merchant_id',Mage::app()->getStore()),
-            'token' => Mage::getStoreConfig('payment/sign2pay/application_token',Mage::app()->getStore()),
+            'merchantId' => $this->getSign2payMerchantId(),
+            'token' => $this->getSign2payToken(),
+        );
+    }
+
+    /**
+     * Retrive sign2pay options.
+     *
+     * @return array
+     */
+    public function getSign2PaySignature($apiKey, $token, $timestamp)
+    {
+        return hash_hmac(
+            "sha256",
+            $timestamp . $token,
+            $apiKey
         );
     }
 

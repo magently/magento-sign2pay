@@ -131,16 +131,14 @@
         } else {
             window.sign2pay = new Sign2Pay(s2pOptions);
         }
-
-        if (typeof payment === 'object') {
-            payment.addBeforeInitFunction('sign2pay', function(a) {
-                // Perform risk assessment
-                window.sign2pay.riskAssessment();
-
-                // Disable the Sign2Pay payment method
-                $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
-            });
-        }
     });
+
+    window.initializeRiskAssessment = function() {
+        // Perform risk assessment
+        window.sign2pay.riskAssessment();
+
+        // Disable the Sign2Pay payment method
+        $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
+    };
 
 })(jQuery.noConflict());

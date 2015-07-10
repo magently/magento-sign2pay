@@ -40,7 +40,7 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
     {
         $this->_request = $request;
 
-        $apiKey =  Mage::getStoreConfig('payment/sign2pay/api_token', Mage::app()->getStore());
+        $apiKey =  Mage::helper('sign2pay')->getSign2payApiKey();
 
         $orderId    = $this->getRequestData('ref_id');
         $merchantId = $this->getRequestData('merchant_id');
@@ -92,7 +92,7 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
             $result['status'] = 'failure';
             $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/failure';
             $result['params'] = array(
-                'ref_id'    => $refId,
+                'ref_id'    => $orderId,
                 'message'   => Mage::helper('sign2pay')->__('Sorry, but we could not process your payment at this time.'),
             );
         }
@@ -101,24 +101,34 @@ class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstra
         Mage::app()->getResponse()->setHeader('Content-type', 'application/json');
         Mage::app()->getResponse()->setBody($jsonData);
         Mage::app()->getResponse()->sendResponse();
+
+        return $this;
+    }
+
+    /**
+     * Cancel the order
+     *
+     * @param Mage_Sales_Model_Order $order
+     */
+    public function cancel(Mage_Sales_Model_Order $order)
+    {
+        $order->cancel()->save();
+
+        return $this;
     }
 
     /**
      * Veritfy the gateway response
      *
-     * @param string $api_key
+     * @param string $apiKey
      * @param string $token
      * @param string $timestamp
      * @param string $signature
      * @return boolean
      */
-    protected function _verifyResponse($api_key, $token, $timestamp, $signature)
+    protected function _verifyResponse($apiKey, $token, $timestamp, $signature)
     {
-        return $signature === hash_hmac(
-            "sha256",
-            $timestamp . $token,
-            $api_key
-        );
+        return $signature === Mage::helper('sign2pay')->getSign2paySignature($apiKey, $token, $timestamp);
     }
 
     /**

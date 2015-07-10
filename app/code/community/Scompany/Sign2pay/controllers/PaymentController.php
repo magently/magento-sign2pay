@@ -74,7 +74,7 @@ class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Act
         if ($session->getLastRealOrderId()) {
             $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
             if ($order->getId()) {
-                $order->cancel()->save();
+                Mage::getModel('sign2pay/processor')->cancel($order);
             }
             Mage::helper('sign2pay/checkout')->restoreQuote();
             Mage::getSingleton('checkout/session')->addError("You've cancelled the Sign2Pay screen.");
