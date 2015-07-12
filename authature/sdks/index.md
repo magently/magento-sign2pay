@@ -15,7 +15,7 @@ We're currently working on releasing SDKs for:
 
 - Ruby
 - PHP
-- iOS
+- <a href="ios">iOS</a>
 - Node.js
 
 If you'd like to see your language of choice added to this list, [drop us a line](mailto:support@sign2pay.com?subject=Authature SDKs)!
