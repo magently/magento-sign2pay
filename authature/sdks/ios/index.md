@@ -11,12 +11,11 @@ title: iOS Integration
 
 # Authature iOS SDK
 
-The Authature iOS SDK is designed to facilitate the integration Authature within your iOS apps.
+## Getting started
 
-##Getting started
 A pod will be released soon.
 
-## Setting-up the AuthatureClient
+## Setting up the AuthatureClient
 
 First create an instance of AuthatureClientSettings to hold your client details:
 
@@ -28,7 +27,7 @@ AuthatureClientSettings *clientSettings =
 
 With this settings object, you can instantiate an AuthatureClient.
 AuthatureClient uses a UIWebView to load the OAuth2 pages.
-The delegate gives you control over where this webview ends up in your view hiërarchy.
+The delegate gives you control over where this webview ends up in your view hierarchy.
 More info on the delegate below.
 
 {% highlight objective-c %}
@@ -42,7 +41,7 @@ The AuthatureClient uses a UIWebView to go through Authature's OAuth2 flow.
 When the AuthatureClient is instantiated, you need to pass it an object which implements the AuthatureDelegate protocol.
 Your delegate will be used to either obtain a controller to present the UIWebView, or the UIWebView will be passed to the delegate to present and dismiss.
 
-In the first scenarion, simply implement this and return your controller.
+In the first scenario, simply implement this and return your controller.
 
 {% highlight objective-c %}
 - (UIViewController *)controllerForAuthatureWebView;
@@ -86,7 +85,7 @@ Depending on your setup Authature supports different scopes.
 You can start the flow for any of these scopes by calling the corresponding method.
 The userParams object holds properties for email, firstName and lastName.
 These values will be used as parameters in the Authature flow.
-All these methods have 2 blocks as parameters, a successCallback and an errorCallback.
+All these methods have two blocks as parameters, a successCallback and an errorCallback.
 
 (note, since these blocks will be called in an async fashion, its is best to keep a strong reference to the client object)
 
@@ -145,7 +144,7 @@ If you want a combination of scopes you can call the more generic method:
 
 ##Token storage
 The AuthatureClient can be configured to automatically store a token per requested scope (disabled by default).
-If you turn on this feature, the AuthatureClient will use this token to send user params into the Authature flow if a new token is requested. This way, your users don't have to re-enter their details (e-mail) when going through the flow.
+If you turn on this feature, the AuthatureClient will use this token to send user params into the Authature flow if a new token is requested. This way, your users don't have to re-enter their details when going through the flow.
 
 Turn it on like this:
 
@@ -214,7 +213,7 @@ If you are using the automatic token storage, you can verify the stored token by
 
 ##UI Components
 When Authature is combined with Sign2Pay, a token can be linked to a bank account.
-For conversion reasons, you may want to display the logo's of supported banks in your app.
+For conversion reasons, you may want to display the logos of supported banks in your app.
 When you have a preapproved scope token, you may want to show the logo of the bank associated to that token.
 
 UIImageView+Authature and UIButton+Authature add methods to UIImageView and UIButton to make this happen.
