@@ -1,6 +1,6 @@
 <?php
 
-class Scompany_Sign2pay_PaymentController extends Mage_Core_Controller_Front_Action
+class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Action
 {
     /**
      * Redirect action after placing an order with Sign2Pay payment

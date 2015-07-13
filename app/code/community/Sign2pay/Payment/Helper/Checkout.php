@@ -3,7 +3,7 @@
  * Checkout workflow helper
  * @see Mage_Paypal_Helper_Checkout
  */
-class Scompany_Sign2pay_Helper_Checkout extends Mage_Core_Helper_Abstract
+class Sign2pay_Payment_Helper_Checkout extends Mage_Core_Helper_Abstract
 {
     /**
      * Restore last active quote based on checkout session

@@ -1,5 +1,6 @@
 <?php
-class Scompany_Sign2pay_Block_Redirect extends Mage_Core_Block_Template
+
+class Sign2pay_Payment_Block_Redirect extends Mage_Core_Block_Template
 {
     /**
      * @var Mage_Sales_Model_Order
@@ -31,7 +32,7 @@ class Scompany_Sign2pay_Block_Redirect extends Mage_Core_Block_Template
         $order = $this->getOrder();
 
         if (!$order->getId() || $order->getPayment()->getMethodInstance()->getCode() != 'sign2pay') {
-            return $this->__('There is no order to be payed with Sign2Pay.');
+            return $this->__('There is no order to be payed with Sign2pay.');
         }
 
         return parent::_toHtml();

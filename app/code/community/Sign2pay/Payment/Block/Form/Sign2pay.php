@@ -1,5 +1,6 @@
 <?php
-class Scompany_Sign2pay_Block_Form_Sign2pay extends Mage_Payment_Block_Form
+
+class Sign2pay_Payment_Block_Form_Sign2pay extends Mage_Payment_Block_Form
 {
     protected function _construct()
     {

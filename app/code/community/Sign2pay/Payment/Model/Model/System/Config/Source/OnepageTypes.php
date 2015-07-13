@@ -1,6 +1,6 @@
 <?php
 
-class Scompany_Sign2pay_Model_Model_System_Config_Source_OnepageTypes
+class Sign2pay_Payment_Model_Model_System_Config_Source_OnepageTypes
 {
     public function toOptionArray()
     {

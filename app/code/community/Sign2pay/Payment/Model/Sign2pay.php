@@ -1,6 +1,6 @@
 <?php
 
-class Scompany_Sign2pay_Model_Sign2pay extends Mage_Payment_Model_Method_Abstract
+class Sign2pay_Payment_Model_Sign2pay extends Mage_Payment_Model_Method_Abstract
 {
     protected $_code = 'sign2pay';
     protected $_formBlockType = 'sign2pay/form_sign2pay';

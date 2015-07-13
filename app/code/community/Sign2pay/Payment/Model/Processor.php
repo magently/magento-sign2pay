@@ -1,6 +1,6 @@
 <?php
 
-class Scompany_Sign2pay_Model_Processor extends Mage_Payment_Model_Method_Abstract
+class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstract
 {
     /**
      * Request order

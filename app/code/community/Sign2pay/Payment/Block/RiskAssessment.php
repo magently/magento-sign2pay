@@ -1,6 +1,6 @@
 <?php
 
-class Scompany_Sign2pay_Block_RiskAssessment extends Mage_Core_Block_Template
+class Sign2pay_Payment_Block_RiskAssessment extends Mage_Core_Block_Template
 {
     protected $_order;
 

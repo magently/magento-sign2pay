@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <config>
     <modules>
-        <Scompany_Sign2pay>
+        <Sign2pay_Payment>
             <version>0.3.9</version>
-        </Scompany_Sign2pay>
+        </Sign2pay_Payment>
     </modules>
 
     <global>
@@ -19,13 +19,13 @@
     	</fieldsets>
         <models>
             <sign2pay>
-                <class>Scompany_Sign2pay_Model</class>
+                <class>Sign2pay_Payment_Model</class>
             </sign2pay>
         </models>
         <resources>
             <sign2pay_setup>
                 <setup>
-                    <module>Scompany_Sign2pay</module>
+                    <module>Sign2pay_Payment</module>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -44,12 +44,12 @@
         </resources>
         <blocks>
             <sign2pay>
-                <class>Scompany_Sign2pay_Block</class>
+                <class>Sign2pay_Payment_Block</class>
             </sign2pay>
         </blocks>
         <helpers>
             <sign2pay>
-                <class>Scompany_Sign2pay_Helper</class>
+                <class>Sign2pay_Payment_Helper</class>
             </sign2pay>
         </helpers>
     </global>
@@ -69,17 +69,17 @@
     </default>
     <frontend>
         <routers>
-            <sign2pay module="Scompany_Sign2pay">
+            <sign2pay module="Sign2pay_Payment">
                 <use>standard</use>
                 <args>
-                    <module>Scompany_Sign2pay</module>
+                    <module>Sign2pay_Payment</module>
                     <frontName>sign2pay</frontName>
                 </args>
             </sign2pay>
         </routers>
         <layout>
             <updates>
-                <sign2pay module="Scompany_Sign2pay">
+                <sign2pay module="Sign2pay_Payment">
                     <file>sign2pay.xml</file>
                 </sign2pay>
             </updates>

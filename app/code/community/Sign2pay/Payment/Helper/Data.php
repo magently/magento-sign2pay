@@ -1,6 +1,6 @@
 <?php
 
-class Scompany_Sign2pay_Helper_Data extends Mage_Core_Helper_Abstract
+class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 {
 
     /**

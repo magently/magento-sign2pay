@@ -1,6 +1,6 @@
 <?php
 
-class Scompany_Sign2pay_Block_Info_Sign2pay extends Mage_Payment_Block_Info
+class Sign2pay_Payment_Block_Info_Sign2pay extends Mage_Payment_Block_Info
 {
     protected function _prepareSpecificInformation($transport = null)
     {
