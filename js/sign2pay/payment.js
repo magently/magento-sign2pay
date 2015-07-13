@@ -101,6 +101,10 @@
         Sign2Pay.prototype.initializePayment = function() {
             var self = this;
 
+            $(window).on('beforeunload', function() {
+                return 'Leaving this screen might prevent you from completing this purchase.';
+            });
+
             var callback = function(options) {
                 options['launch'] = "on_load";
                 options['map'] = {};
