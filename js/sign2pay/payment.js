@@ -134,11 +134,17 @@
     });
 
     window.initializeRiskAssessment = function() {
-        // Perform risk assessment
-        window.sign2pay.riskAssessment();
+        var interval;
+        interval = setInterval(function() {
+            if (!window.sign2pay) return;
+            clearInterval(interval);
 
-        // Disable the Sign2Pay payment method
-        $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
+            // Perform risk assessment
+            window.sign2pay.riskAssessment();
+
+            // Disable the Sign2Pay payment method
+            $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
+        });
     };
 
 })(jQuery.noConflict());

@@ -12,7 +12,8 @@ class Scompany_Sign2pay_Helper_Checkout extends Mage_Core_Helper_Abstract
      */
     public function restoreQuote()
     {
-        $order = $this->_getCheckoutSession()->getLastRealOrder();
+        $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         if ($order->getId()) {
             $quote = $this->_getQuote($order->getQuoteId());
             if ($quote->getId()) {
@@ -36,7 +37,8 @@ class Scompany_Sign2pay_Helper_Checkout extends Mage_Core_Helper_Abstract
      */
     public function cancelCurrentOrder($comment)
     {
-        $order = $this->_getCheckoutSession()->getLastRealOrder();
+        $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         if ($order->getId() && $order->getState() != Mage_Sales_Model_Order::STATE_CANCELED) {
             $order->registerCancellation($comment)->save();
             return true;
