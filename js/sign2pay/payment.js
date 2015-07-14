@@ -101,28 +101,52 @@
         Sign2Pay.prototype.initializePayment = function() {
             var self = this;
 
-            $(window).on('beforeunload', function() {
+            var unloadCallback = function() {
                 return 'Leaving this screen might prevent you from completing this purchase.';
-            });
+            };
+
+            var closeCallback = function() {};
+
+            var cancelCallback = function() {
+                $(window).unbind('beforeunload', unloadCallback);
+                window.location = self.baseUrl + "sign2pay/payment/cancel";
+            };
 
             var callback = function(options) {
                 options['launch'] = "on_load";
                 options['map'] = {};
+
                 options['success']  = function() {
-                    $(".s2p-button-text").addClass("button btn-cart").html("Pay with Sign2Pay");
-                    $(".loading").hide();
+                    var el = $(this.el).get(0);
+                    $('.s2p-button-text', el).remove();
+                    $('.s2p-button-banks', el)
+                        .append('<span class="button btn-cart btn-pay">Pay with Sign2Pay</span>')
+                        .append('<span class="button btn-cart btn-cancel">Cancel</span>')
+                        .children('.btn-cancel')
+                        .on('click', function() {
+                            cancelCallback();
+                            return false;
+                        });
+                    $('.loading, .s2p-text', el).remove();
                 };
+
                 options['error']  = function() {
                     alert('There was a problem during Sign2Pay initialization. Your ref_id is ' + options['ref_id'] + '.');
-                    $(".loading").hide();
+
+                    closeCallback = cancelCallback;
+
+                    var el = $(this.el).get(0);
+                    $(".loading", el).hide();
                 };
-                options['close'] = function() {
-                    window.location = self.baseUrl + "sign2pay/payment/cancel";
-                }
+
+                options['close'] = function(a) {
+                    closeCallback();
+                };
 
                 self.initTransport(options);
-            }
+            };
 
+            $(window).on('beforeunload', unloadCallback);
             this.fetchPaymentOptions(callback);
         }
 

@@ -20,16 +20,16 @@
 <div class="initializing">
   <h1>Sign2Pay </h1>
   <div id="sign2pay" style="display: block !important;">
-    <div class='s2p-button-banks'>
-      <img class="loading" src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>"
-            title="<?php echo $this->__('Please wait while loading payment information...') ?>"
+    <div class="s2p-button-banks">
+      <img class="loading" src="<?php print $this->getSkinUrl('images/opc-ajax-loader.gif') ?>"
+            title="<?php print $this->__('Please wait while loading payment information...') ?>"
         />
     </div>
 
-    <span class='s2p-button-text'>
-      Thank you for your order.
+    <span class="s2p-text">
+      <?php print $this->__('Thank you for your order.'); ?>
       <br/>
-      We are now initializing Sign2Pay to authorize your payment.
+      <?php print $this->__('We are now initializing Sign2Pay to authorize your payment.'); ?>
     </span>
   </div>
 </div>
