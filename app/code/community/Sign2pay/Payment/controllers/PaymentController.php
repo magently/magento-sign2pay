@@ -8,12 +8,25 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
     public function redirectAction()
     {
         $session = Mage::getSingleton('checkout/session');
-        $session->setSign2payQuoteId($session->getQuoteId());
-        $session->unsQuoteId();
-        $session->unsRedirectUrl();
+
+        if (!$session->getQuoteId()) {
+            if (!$session->getSign2payQuoteId()) {
+                return $this->_redirect('checkout/cart');
+            }
+        } else {
+            $session->setSign2payQuoteId($session->getQuoteId());
+            $session->unsQuoteId();
+            $session->unsRedirectUrl();
+        }
 
         $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
         $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+
+        if (!$order->getId() || $order->getPayment()->getMethodInstance()->getCode() != 'sign2pay') {
+            Mage::getSingleton('checkout/session')->addError("There is no order pending a payment.");
+            return $this->_redirect('checkout/cart');
+        }
+
         $order->setState(Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()));
         $order->save();
 
