@@ -157,18 +157,18 @@
         if (!s2pOptions || !s2pOptions['merchantId'] || !s2pOptions['token']) {
             throwError('The Sign2Pay Module is enabled, but you are missing required settings.');
         } else {
-            window.sign2pay = new Sign2Pay(s2pOptions);
+            window.sign2payPayment = new Sign2Pay(s2pOptions);
         }
     });
 
     window.initializeRiskAssessment = function() {
         var interval;
         interval = setInterval(function() {
-            if (!window.sign2pay) return;
+            if (typeof window.sign2payPayment !== 'object') return;
             clearInterval(interval);
 
             // Perform risk assessment
-            window.sign2pay.riskAssessment();
+            window.sign2payPayment.riskAssessment();
 
             // Disable the Sign2Pay payment method
             $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
