@@ -86,7 +86,20 @@
                 options['success'] = function() {
                     // Disable the Sign2Pay payment method
                     $('input[name="payment[method]"][value="sign2pay"]').removeAttr('disabled');
-                }
+                };
+
+                options['checkout_type'] = 'single';
+
+                options['map'] = {
+                    first_name: '[name="billing[firstname]"]',
+                    last_name: '[name="billing[lastname]"]',
+                    email: '[name="billing[email]"]',
+                    address: '[name="billing[street][]"]',
+                    postal_code: '[name="billing[postcode]"]',
+                    city: '[name="billing[city]"]',
+                    region: '[name="billing[region_id]"]',
+                    country: '[name="billing[country_id]"]'
+                };
 
                 self.initTransport(options);
             }
