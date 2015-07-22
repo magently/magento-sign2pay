@@ -87,5 +87,15 @@
         <secure_url>
             <sign2pay_payment_redirect>/sign2pay/payment/redirect</sign2pay_payment_redirect>
         </secure_url>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <sign2pay>
+                        <class>sign2pay/observer</class>
+                        <method>afterBlockHtml</method>
+                    </sign2pay>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
     </frontend>
 </config>
