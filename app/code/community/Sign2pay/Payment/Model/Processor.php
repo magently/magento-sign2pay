@@ -138,6 +138,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
     {
         $payment = $this->_order->getPayment();
         $payment->setTransactionId($this->getRequestData('purchase_id'))
+            ->setCurrencyCode('EUR')
             ->setIsTransactionClosed(0)
             ->registerCaptureNotification(
                 $this->getRequestData('amount') / 100

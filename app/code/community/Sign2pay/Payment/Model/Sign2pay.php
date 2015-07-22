@@ -13,4 +13,15 @@ class Sign2pay_Payment_Model_Sign2pay extends Mage_Payment_Model_Method_Abstract
     {
         return Mage::getUrl('sign2pay/payment/redirect', array('_secure' => true));
     }
+
+    /**
+     * Check method for processing with base currency
+     *
+     * @param string $currencyCode
+     * @return boolean
+     */
+    public function canUseForCurrency($currencyCode)
+    {
+        return $currencyCode == 'EUR';
+    }
 }
