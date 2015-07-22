@@ -40,12 +40,18 @@
          * @param object options
          */
         Sign2Pay.prototype.initTransport = function(options) {
-            window.sign2PayOptions = options;
-
             if (!this.scriptAttached) {
                 this.scriptAttached = true;
                 $('head').append('<script type="text/javascript" src="https://sign2pay.com/merchant.js" async></script>');
             }
+
+            var interval;
+            interval = setInterval(function() {
+                if (typeof window.s2p !== 'object' || typeof window.s2p.options !== 'object') return;
+                clearInterval(interval);
+                window.sign2PayOptions = options;
+                window.s2p.options.initTransport();
+            });
         }
 
         /**
@@ -82,24 +88,29 @@
         Sign2Pay.prototype.riskAssessment = function() {
             var self = this;
 
+            // Disable payment method
+            $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
+
             var callback = function(options) {
+                var errors = [];
+
+                $.each(options, function(key, value) {
+                    if (!value) {
+                        errors.push(key);
+                    }
+                });
+
+                if (errors.length) {
+                    console.log('[RA] Missing values for: ' + errors.join(', '));
+                    return;
+                }
+
                 options['success'] = function() {
-                    // Disable the Sign2Pay payment method
+                    // Enable the Sign2Pay payment method
                     $('input[name="payment[method]"][value="sign2pay"]').removeAttr('disabled');
                 };
 
-                options['checkout_type'] = 'single';
-
-                options['map'] = {
-                    first_name: '[name="billing[firstname]"]',
-                    last_name: '[name="billing[lastname]"]',
-                    email: '[name="billing[email]"]',
-                    address: '[name="billing[street][]"]',
-                    postal_code: '[name="billing[postcode]"]',
-                    city: '[name="billing[city]"]',
-                    region: '[name="billing[region_id]"]',
-                    country: '[name="billing[country_id]"]'
-                };
+                options['checkout_type'] = 'multi';
 
                 self.initTransport(options);
             }
@@ -182,9 +193,6 @@
 
             // Perform risk assessment
             window.sign2payPayment.riskAssessment();
-
-            // Disable the Sign2Pay payment method
-            $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
         });
     };
 
