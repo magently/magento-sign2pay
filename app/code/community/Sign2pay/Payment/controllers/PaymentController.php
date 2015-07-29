@@ -27,7 +27,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
             return $this->_redirect('checkout/cart');
         }
 
-        $order->setState(Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()), true);
+        Mage::helper('sign2pay')->setStatusOnOrder($order, Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()));
         $order->save();
 
         $this->loadLayout();
