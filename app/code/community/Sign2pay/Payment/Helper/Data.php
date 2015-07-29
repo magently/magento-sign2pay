@@ -79,4 +79,23 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         );
     }
 
+    /**
+     * Set status on order
+     *
+     * @param Mage_Sales_Model_Order $order
+     * @param string $status_code
+     */
+    public function setStatusOnOrder($order, $status_code)
+    {
+        $collection = Mage::getResourceModel('sales/order_status_collection');
+        $collection->joinStates();
+        $collection->getSelect()
+            ->where('main_table.status=?', $status_code)
+            ->limit(1);
+
+        $status = $collection->fetchItem()->getData();
+
+        $order->setState($status['state'], $status['status']);
+    }
+
 }
