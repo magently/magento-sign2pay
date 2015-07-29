@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>Sign2Pay_Mobile_Payments</name>
-    <version>0.6.2</version>
+    <version>0.6.3</version>
     <stability>beta</stability>
     <license>Sign2Pay Commercial License</license>
     <channel>community</channel>
@@ -13,7 +13,7 @@ Analysing hundreds of data points in a single signature, Sign2Pay provides the s
 &#xD;
 Compatible with: 1.7, 1.8, 1.9</description>
     <notes>Changes:&#xD;
-- Fixed compatibility for Magento 1.7.0.2 and below</notes>
+- Fixed order states placement for custom statuses</notes>
     <authors><author><name>Sign2Pay</name><user>Sign2Pay</user><email>team@sign2pay.com</email></author></authors>
     <date>2015-07-27</date>
     <time>06:00:44</time>
