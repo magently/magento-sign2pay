@@ -47,6 +47,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
         try {
             $data = $this->getRequest()->getPost();
             Mage::getModel('sign2pay/processor')->processRequest($data);
+            exit;
         } catch (Exception $e) {
             Mage::logException($e);
             $this->getResponse()->setHttpResponseCode(500);
