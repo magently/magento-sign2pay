@@ -97,12 +97,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
             );
         }
 
-        $jsonData = json_encode($result);
-        Mage::app()->getResponse()->setHeader('Content-type', 'application/json');
-        Mage::app()->getResponse()->setBody($jsonData);
-        Mage::app()->getResponse()->sendResponse();
-
-        return $this;
+        return $result;
     }
 
     /**
