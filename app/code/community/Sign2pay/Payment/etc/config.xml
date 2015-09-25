@@ -67,6 +67,15 @@
             </sign2pay>
          </payment>
     </default>
+    <adminhtml>
+        <layout>
+            <updates>
+                <sign2pay>
+                    <file>sign2pay.xml</file>
+                </sign2pay>
+            </updates>
+        </layout>
+    </adminhtml>
     <frontend>
         <routers>
             <sign2pay module="Sign2pay_Payment">

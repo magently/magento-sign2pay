@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<layout>
+
+    <default>
+        <reference name="notifications">
+            <block type="sign2pay/adminhtml_notifications" name="sign2pay_notifications" template="sign2pay/notifications.phtml"/>
+        </reference>
+    </default>
+
+</layout>
