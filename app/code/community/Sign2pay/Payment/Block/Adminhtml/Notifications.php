@@ -5,6 +5,8 @@ class Sign2pay_Payment_Block_Adminhtml_Notifications extends Mage_Adminhtml_Bloc
     public function getMessage()
     {
         try {
+            if (Mage::app()->getRequest()->getParam('section') != 'payment') return '';
+
             $payments = Mage::getSingleton('payment/config')->getActiveMethods();
 
             if (!isset($payments['sign2pay'])) return '';
