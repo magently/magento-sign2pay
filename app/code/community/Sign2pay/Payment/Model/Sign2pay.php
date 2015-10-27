@@ -17,7 +17,7 @@ class Sign2pay_Payment_Model_Sign2pay extends Mage_Payment_Model_Method_Abstract
         $client_id = 'ace647b5bba31f9616ea30b107ae0a4a';
         $redirect_uri = 'https://rkky1b9r.magently.com/sign2pay/callback'; //Mage::getUrl('sign2pay/payment/response', array('_secure' => true));
         $scope = 'authenticate';
-        $state = 'test'//Mage::getSingleton("core/session")->getEncryptedSessionId();
+        $state = 'test';//Mage::getSingleton("core/session")->getEncryptedSessionId();
         $response_type = 'code';
         $device_uid = 'test';
 
