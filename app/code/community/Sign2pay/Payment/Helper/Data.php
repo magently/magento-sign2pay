@@ -1,4 +1,5 @@
 <?php
+include '/var/www/html/ChromePhp.php';
 
 class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -34,6 +35,16 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Retrive Sign2Pay Client ID.
+     *
+     * @return string
+     */
+    public function getSign2payClientId()
+    {
+        return Mage::getStoreConfig('payment/sign2pay/client_id',Mage::app()->getStore());
+    }
+
+    /**
      * Retrive sign2pay options.
      *
      * @return array
@@ -65,6 +76,11 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function attachPaymentScripts(array $additional = array())
     {
+        /**
+         * @todo Properly remove/update this functionality
+         */
+        return;
+
         Mage::app()->getLayout()->getBlock('head')->addJs('sign2pay/jquery.min.js');
         Mage::app()->getLayout()->getBlock('head')->addJs('sign2pay/payment.js');
 
@@ -77,6 +93,17 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
                 '<script type="text/javascript">' . $script . '</script>'
             )
         );
+    }
+
+    /**
+     * Return user sign2pay checkout session hash.
+     *
+     * @return string
+     */
+    private function getUserStateHash(){
+        $hash = Mage::helper('core')->getRandomString(16);
+        $checkout = Mage::getSingleton('checkout/session')->setSign2PayUserHash($hash);
+        return $hash;
     }
 
     /**
@@ -96,6 +123,48 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         $status = $collection->fetchItem()->getData();
 
         $order->setState($status['state'], $status['status']);
+    }
+
+    /**
+     * Prepare and return Sign2Pay request
+     * @todo device unical id
+     * @todo mobile phone number with country code
+     *
+     * @return string
+     */
+    public function getSign2PayRequest(){
+
+        $billing = Mage::getSingleton('checkout/session')->getQuote()->getBillingAddress();
+
+        $baseUrl = 'https://app.sign2pay.com/oauth/authorize';
+
+        $client_id = $this->getSign2payClientId();
+        $redirect_uri = Mage::getUrl('sign2pay/payment/response', array('_secure' => false));
+        $redirect_uri = preg_replace('/index.php\/sign2pay/', 'sign2pay', $redirect_uri);
+        $redirect_uri = rtrim($redirect_uri,"/");
+
+        $scope = 'payment';
+        $state = $this->getUserStateHash();;
+        $response_type = 'code';
+        $device_uid = 'test'; // o matko bosko
+
+        $query = http_build_query(array(
+            'client_id' => $client_id,
+            'redirect_uri' => $redirect_uri,
+            'scope' => $scope,
+            'state' => $state,
+            'response_type' => $response_type,
+            'device_uid' => $device_uid,            
+            'user_params[identifier]' => $billing['email'],
+            'user_params[first_name]' => $billing['firstname'],
+            'user_params[last_name]' => $billing['lastname'],
+            'user_params[address]' => $billing['street'],
+            'user_params[city]' => $billing['city'],
+            'user_params[postal_code]' => $billing['postcode']
+            )
+        );
+        return $baseUrl.'?'.$query;
+
     }
 
 }
