@@ -13,7 +13,7 @@ class Sign2pay_Payment_Model_Sign2pay extends Mage_Payment_Model_Method_Abstract
     {
         //return Mage::getUrl('sign2pay/payment/redirect', array('_secure' => true));
 
-        return Mage::helper('sign2pay')->getSign2PayRequest();
+        return Mage::helper('sign2pay')->getSign2PayInitialRequest();
     }
 
     /**

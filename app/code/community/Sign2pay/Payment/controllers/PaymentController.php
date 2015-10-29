@@ -40,21 +40,31 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
      */
     public function responseAction()
     {
-        if (!$this->getRequest()->isPost()) {
+        if (!$this->getRequest()->isGet()) {
             return;
         }
-
         try {
+            $data = $this->getRequest()->getParams();
+
+            if ($data['state'] !== Mage::getSingleton('checkout/session')->getSign2PayUserHash()){
+                return;
+            }
+            $result = Mage::getModel('sign2pay/processor')->processTokenExchangeRequest($data);
+
+            //$this->_redirectUrl($url)
+
+        /*
             $data = $this->getRequest()->getPost();
             $result = Mage::getModel('sign2pay/processor')->processRequest($data);
 
             $jsonData = json_encode($result);
             $this->getResponse()->setHeader('Content-type', 'application/json');
-            $this->getResponse()->setBody($jsonData);
+            $this->getResponse()->setBody($jsonData);*/
         } catch (Exception $e) {
             Mage::logException($e);
             $this->getResponse()->setHttpResponseCode(500);
         }
+
     }
 
     /**
