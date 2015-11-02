@@ -29,11 +29,13 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
     }
 
     public function processTokenExchangeRequest(array $data){
-        //start variables preparation
         $client_id = Mage::helper('sign2pay')->getSign2payClientId();
         $state = Mage::getSingleton('checkout/session')->getSign2PayUserHash();
         $code = $data['code'];
+        
         $redirect_uri = Mage::getUrl('sign2pay/payment/response', array('_secure' => true));
+        $redirect_uri = preg_replace('/index.php\/sign2pay/', 'sign2pay', $redirect_uri);
+        $redirect_uri = rtrim($redirect_uri,"/");
 
         $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
         $request_body = array(
@@ -42,7 +44,9 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
             'code' => $code,
             'redirect_uri' => $redirect_uri
         );
-        $encrypted_app_creds = Mage::helper('core')->encrypt(base64_encode($client_id.$client_secret));
+
+        //encrypting with mage core helper gives wrong output
+        $encrypted_app_creds = base64_encode(trim($client_id.':'.$client_secret));
 
         /*$request_header = array(
             'Authorization' => 'Basic '.$encrypted_app_creds,
@@ -52,18 +56,19 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
 
 
         /*==========================================start request preparation==========================*/
-        $client = new Varien_Http_Client('https://app.sign2pay.com/oauth/authorize');
+        $client = new Varien_Http_Client('https://app.sign2pay.com/oauth/token');
         $client->setMethod(Varien_Http_Client::POST);
         
         //$client -> setHeaders($request_header);
 
         $client->setAuth('Basic',$encrypted_app_creds);
-        
+        //$client->setParameterPost($request_body);
+
+        Mage::log($client);
         try{
             $response = $client->request();
             echo $response->getBody();
-            var_dump($response->getHeaders());
-        } catch (Exception $e) {
+        } catch (Zend_Http_Client_Exception $e) {
             Mage::logException($e);
         }
 
