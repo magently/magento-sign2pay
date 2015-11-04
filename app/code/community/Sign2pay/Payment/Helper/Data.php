@@ -1,5 +1,4 @@
 <?php
-include '/var/www/html/ChromePhp.php';
 
 class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -82,6 +81,18 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Build and return url to module's response action.
+     *
+     * @return array
+     */
+    public function getRedirectUri()
+    {
+        $redirect_uri = Mage::getUrl('sign2pay/payment/response', array('_secure' => true));
+        $redirect_uri = preg_replace('/index.php\/sign2pay/', 'sign2pay', $redirect_uri);
+        return rtrim($redirect_uri,"/");
+    }
+
+    /**
      * Attach payment scripts.
      */
     public function attachPaymentScripts(array $additional = array())
@@ -123,7 +134,7 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
      */
     private function sign2PayCheckoutHash($id){
         $hash = Mage::helper('core')->encrypt($id);
-        Mage::getSingleton('checkout/session')->setSign2PayUserHash($hash);
+        Mage::getSingleton('checkout/session')->setSign2PayCheckoutHash($hash);
         return $hash;
     }
 
@@ -149,7 +160,6 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * Prepare and return initial Sign2Pay request
      * @todo device unical id
-     * @todo mobile phone number with country code
      *
      * @return string
      */
@@ -163,9 +173,7 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 
         $baseUrl = 'https://app.sign2pay.com/oauth/authorize';
         $client_id = $this->getSign2payClientId();
-        $redirect_uri = Mage::getUrl('sign2pay/payment/response', array('_secure' => true));
-        $redirect_uri = preg_replace('/index.php\/sign2pay/', 'sign2pay', $redirect_uri);
-        $redirect_uri = rtrim($redirect_uri,"/");
+        $redirect_uri = $this->getRedirectUri();
 
         $scope = 'payment';
         $state = $this->userStateHash();

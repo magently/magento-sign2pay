@@ -28,30 +28,26 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         return isset($this->_request[$key]) ? $this->_request[$key] : null;
     }
 
+    /**
+     * Request data getter
+     *
+     * 
+     * @return string (encoded json)
+     */
     public function processTokenExchangeRequest(array $data){
+        //start variables preparation
         $client_id = Mage::helper('sign2pay')->getSign2payClientId();
+        $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
         $state = Mage::getSingleton('checkout/session')->getSign2PayUserHash();
         $code = $data['code'];
-        
-        $redirect_uri = Mage::getUrl('sign2pay/payment/response', array('_secure' => true));
-        $redirect_uri = preg_replace('/index.php\/sign2pay/', 'sign2pay', $redirect_uri);
-        $redirect_uri = rtrim($redirect_uri,"/");
+        $redirect_uri = Mage::helper('sign2pay')->getRedirectUri();
 
-        $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
         $request_body = array(
             'client_id' => $client_id,
             'state' => $state,
             'code' => $code,
             'redirect_uri' => $redirect_uri
         );
-
-        //encrypting with mage core helper gives wrong output
-        $encrypted_app_creds = base64_encode(trim($client_id.':'.$client_secret));
-
-        /*$request_header = array(
-            'Authorization' => 'Basic '.$encrypted_app_creds,
-            'Content-Type' => 'application/x-www-form-urlencoded'
-        );*/
         //end variables preparation
 
 
@@ -59,26 +55,54 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         $client = new Varien_Http_Client('https://app.sign2pay.com/oauth/token');
         $client->setMethod(Varien_Http_Client::POST);
         
-        //$client -> setHeaders($request_header);
+        $client->setAuth($client_id,$client_secret);
+        $client->setParameterPost($request_body);
 
-        $client->setAuth('Basic',$encrypted_app_creds);
-        //$client->setParameterPost($request_body);
-
-        Mage::log($client);
         try{
             $response = $client->request();
-            echo $response->getBody();
+            return $response->getBody();
         } catch (Zend_Http_Client_Exception $e) {
             Mage::logException($e);
         }
 
+    }
 
+    private function processPaymentRequest(array $data){
+        //start variables preparation
+        $client_id = Mage::helper('sign2pay')->getSign2payClientId();
+        $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
+
+        $quote = Mage::getSingleton('checkout/session')->getQuote();
+        $amount = preg_replace('/[^0-9]/', '', $quote['grand_total']);
+        
+        $ref_id = Mage::getSingleton('checkout/session')->getSign2PayCheckoutHash();
+
+        $request_body = array(
+            'client_id' => $client_id,
+            'amount' => $amount,
+            'ref_id' => $ref_id,
+            'token' => $data['access_token']['token']
+        );
+        //end variables preparation
+
+
+        /*==========================================start request preparation==========================*/
+        $client = new Varien_Http_Client('https://app.sign2pay.com/api/v2/payment/authorize/capture');
+        $client->setMethod(Varien_Http_Client::POST);
+
+        $client->setAuth($client_id,$client_secret);
+        $client->setParameterPost($request_body);
+        try{
+            $response = $client->request();
+            return $response->getBody();
+        } catch (Zend_Http_Client_Exception $e) {
+            Mage::logException($e);
+        }
 
     }
 
 
-
-    /**
+    /*
      * Get gateway data, validate and run corresponding handler
      *
      * @param array $request
