@@ -67,7 +67,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
 
     }
 
-    private function processPaymentRequest(array $data){
+    public function processPaymentRequest(array $data){
         //start variables preparation
         $client_id = Mage::helper('sign2pay')->getSign2payClientId();
         $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
