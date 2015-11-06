@@ -133,7 +133,7 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
      * @return string
      */
     private function sign2PayCheckoutHash($id){
-        $hash = Mage::helper('core')->encrypt($id);
+        $hash = Mage::helper('core')->getRandomString(16);
         Mage::getSingleton('checkout/session')->setSign2PayCheckoutHash($hash);
         return $hash;
     }

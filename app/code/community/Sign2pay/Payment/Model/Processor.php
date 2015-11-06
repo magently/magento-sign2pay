@@ -29,7 +29,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
     }
 
     /**
-     * Request data getter
+     * Exchange hashed credentials for token (second step of Authrature)
      *
      * 
      * @return string (encoded json)
@@ -67,6 +67,12 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
 
     }
 
+    /**
+     * Exchange token for payment id (third step of Authrature)
+     *
+     * 
+     * @return string (encoded json)
+     */
     public function processPaymentRequest(array $data){
         //start variables preparation
         $client_id = Mage::helper('sign2pay')->getSign2payClientId();
@@ -203,15 +209,21 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
     /**
      * Process completed payment (either full or partial)
      */
-    protected function _registerPaymentCapture()
+    public function _registerPaymentCapture()
     {
+
+        $session = $session = Mage::getSingleton('checkout/session');
+        $purchaseId = $session->getPurchaseId();
+        $this->_order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
         $payment = $this->_order->getPayment();
-        $payment->setTransactionId($this->getRequestData('purchase_id'))
+
+        $payment->setTransactionId($purchaseId)
             ->setCurrencyCode('EUR')
             ->setIsTransactionClosed(0)
             ->registerCaptureNotification(
                 $this->getRequestData('amount') / 100
             );
+            Mage::log('test2');
 
         Mage::helper('sign2pay')->setStatusOnOrder($this->_order, Mage::getStoreConfig('payment/sign2pay/complete_order_status', Mage::app()->getStore()));
         $this->_order->save();

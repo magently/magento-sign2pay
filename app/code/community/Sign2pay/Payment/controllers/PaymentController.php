@@ -48,25 +48,33 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
             if (!is_array($data) || $data['state'] !== Mage::getSingleton('checkout/session')->getSign2PayUserHash()
             || array_key_exists('error', $data)){
                 
-                Mage::log('SIGN2PAY ERROR');
+                if(is_array($data)){
+                    Mage::getSingleton('checkout/session')->addError($data['error_description']);
+                }
                 Mage::log($data);
                 return $this->_redirect('sign2pay/payment/cancel', array('_secure'=>true));
             }
 
             $result = json_decode(Mage::getModel('sign2pay/processor')->processTokenExchangeRequest($data), true);
             if (!is_array($result) || array_key_exists('error', $result)){
-                Mage::log('SIGN2PAY ERROR');
+                
+                if(is_array($result)){
+                    Mage::getSingleton('checkout/session')->addError($data['error_description']);
+                }
                 Mage::log($result);
                 return $this->_redirect('sign2pay/payment/cancel', array('_secure'=>true));
             }
 
             $payment = json_decode(Mage::getModel('sign2pay/processor')->processPaymentRequest($result), true);
             if (!is_array($payment) || array_key_exists('error', $payment)){
-                Mage::log('SIGN2PAY ERROR');
+                if(is_array($payment)){
+                    Mage::getSingleton('checkout/session')->addError($data['error_description']);
+                }
                 Mage::log($payment);
                 return $this->_redirect('sign2pay/payment/cancel', array('_secure'=>true));
             }
             Mage::log($payment);
+            Mage::getSingleton('checkout/session')->setPurchaseId($payment['purchase_id']);
             return $this->_redirect('sign2pay/payment/success', array('_secure'=>true));
 
         } catch (Exception $e) {
@@ -81,17 +89,21 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
      */
     public function successAction()
     {
+
+        try{
+            Mage::getModel('sign2pay/processor')->_registerPaymentCapture();
+        }catch (Exception $e){
+            Mage::log($e);
+        }
+        Mage::log('??');
+
         Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
         
         $session = Mage::getSingleton('checkout/session');
         //$session->setQuoteId($session->getSign2payQuoteId(true));
         
         $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
-        Mage::helper('sign2pay')->setStatusOnOrder(
-            $order, Mage::getStoreConfig('payment/sign2pay/complete_order_status', Mage::app()->getStore()));
        
-        //Mage::getModel('payment/info')->setAdditionalInformation('test','test2');
-
         $this->_redirect('checkout/onepage/success', array('_secure'=>true));
     }
 
