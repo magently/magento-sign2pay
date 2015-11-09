@@ -95,12 +95,10 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
         }catch (Exception $e){
             Mage::log($e);
         }
-        Mage::log('??');
 
         Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
         
         $session = Mage::getSingleton('checkout/session');
-        //$session->setQuoteId($session->getSign2payQuoteId(true));
         
         $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
        
@@ -133,7 +131,6 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
                 Mage::getModel('sign2pay/processor')->cancel($order);
             }
             Mage::helper('sign2pay/checkout')->restoreQuote();
-            Mage::getSingleton('checkout/session')->addError("There was a problem with your payment or it has been cancelled");
 
         }
         $this->_redirect('checkout/cart');

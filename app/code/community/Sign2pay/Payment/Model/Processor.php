@@ -223,7 +223,6 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
             ->registerCaptureNotification(
                 $this->getRequestData('amount') / 100
             );
-            Mage::log('test2');
 
         Mage::helper('sign2pay')->setStatusOnOrder($this->_order, Mage::getStoreConfig('payment/sign2pay/complete_order_status', Mage::app()->getStore()));
         $this->_order->save();

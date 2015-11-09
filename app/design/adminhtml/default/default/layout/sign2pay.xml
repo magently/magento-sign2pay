@@ -7,4 +7,8 @@
         </reference>
     </adminhtml_system_config_edit>
 
+    <adminhtml_sales_order_view>
+
+    </adminhtml_sales_order_view>
+
 </layout>
