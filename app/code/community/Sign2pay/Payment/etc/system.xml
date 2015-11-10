@@ -127,6 +127,15 @@
                             <show_in_store>1</show_in_store>
                         </active>
 
+                        <title translate="label">
+                            <label>Label</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+
                         <order_status translate="label">
                             <label>New Order Status</label>
                             <comment>Order status before payment</comment>
@@ -168,7 +177,7 @@
                             <show_in_store>1</show_in_store>
                         </merchant_id>
 
-                        <application_token translate="label" backend_model="adminhtml/system_config_backend_encrypted">
+                        <!--<application_token translate="label" backend_model="adminhtml/system_config_backend_encrypted">
                             <label>Application Token</label>
                             <comment>Located on your Sign2Pay Application settings page</comment>
                             <frontend_type>text</frontend_type>
@@ -176,13 +185,33 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </application_token>
+                        </application_token>-->
+
+                        <client_id translate="label" backend_model="adminhtml/system_config_backend_encrypted">
+                            <label>Client ID</label>
+                            <comment>Located on your Sign2Pay Application settings page</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </client_id>
+
+                        <client_secret translate="label" backend_model="adminhtml/system_config_backend_encrypted">
+                            <label>Client Secret</label>
+                            <comment>Located on your Sign2Pay Application settings page</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </client_secret>
 
                         <api_token translate="label" backend_model="adminhtml/system_config_backend_encrypted">
                             <label>API Token</label>
                             <comment>Located on your Sign2Pay Application settings page</comment>
                             <frontend_type>text</frontend_type>
-                            <sort_order>8</sort_order>
+                            <sort_order>9</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>

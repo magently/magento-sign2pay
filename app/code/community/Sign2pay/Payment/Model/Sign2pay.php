@@ -11,7 +11,14 @@ class Sign2pay_Payment_Model_Sign2pay extends Mage_Payment_Model_Method_Abstract
 
     public function getOrderPlaceRedirectUrl()
     {
-        return Mage::getUrl('sign2pay/payment/redirect', array('_secure' => true));
+        $session = Mage::getSingleton('checkout/session');
+        $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
+
+        Mage::getSingleton('checkout/session')->getQuote()->setIsActive(true)->save();
+        Mage::helper('sign2pay')->setStatusOnOrder(
+            $order, Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()));
+        
+        return Mage::helper('sign2pay')->getSign2PayInitialRequest();
     }
 
     /**
