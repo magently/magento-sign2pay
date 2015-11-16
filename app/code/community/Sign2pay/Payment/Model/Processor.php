@@ -120,43 +120,38 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
     {
         $this->_request = $request;
 
+        $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
         $purchase_id = $this->getRequestData('purchase_id');
         Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
         
         // Load appropriate order
         $this->_order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-
         if (!$this->_order->getId()) {
+            Mage::log('test3');
             throw new Exception('Requested order with id ' . $orderId . ' does not exists.');
         }
-
         $result = array();
 
-        $status = $this->_verifyResponse($purchase_id);
-        
-        if ($status) {
-            if ($status == 'processing') {
-                // Payment was successful, so update the order's state
-                // and send order email and move to the success page
-                $result['status'] = 'success';
-                $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/success';
-                $result['params'] = array(
-                    'purchase_id'   => $purchaseId,
-                    'status'        => $status
-                );
-                Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
-                // Register the payment capture
-                $this->_registerPaymentCapture();
-            } else {
-                // Register the payment failure
-                $this->_registerPaymentDenial();
-            }
+        if ($this->_verifyResponse($purchase_id)) {
+            // Payment was successful, so update the order's state
+            // and send order email and move to the success page
+            $result['status'] = 'success';
+            $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/success';
+            $result['params'] = array(
+                'purchase_id'   => $purchaseId
+            );
+            Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
+            // Register the payment capture
+            Mage::log('test6');
+            $this->_registerPaymentCapture();
         } else {
             // Register the payment failure
+            Mage::log('test8');
             $this->_registerPaymentFailure();
         }
 
         if (!$result) {
+            Mage::log('test9');
             // There is a problem in the response we got
             $result['status'] = 'failure';
             $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/failure';
@@ -202,14 +197,13 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         try{
             $response = $client->request();
             $body = json_decode($response->getBody());
-            if(array_key_exists('error', $body) || !array_key_exists('status') || $body['status'] == 'completed'){
-                return false;
+            if(array_key_exists('status', $body) || $body['status'] == 'processing'){
+                return true;
             }
             else{
-                return $body['status'];
+                return false;
             }            
         } catch (Zend_Http_Client_Exception $e) {
-            Mage::log('exception');
             Mage::logException($e);
             return false;
         }
