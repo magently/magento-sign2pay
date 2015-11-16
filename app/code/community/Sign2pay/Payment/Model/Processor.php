@@ -127,7 +127,6 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         // Load appropriate order
         $this->_order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         if (!$this->_order->getId()) {
-            Mage::log('test3');
             throw new Exception('Requested order with id ' . $orderId . ' does not exists.');
         }
         $result = array();
@@ -142,16 +141,13 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
             );
             Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
             // Register the payment capture
-            Mage::log('test6');
             $this->_registerPaymentCapture();
         } else {
             // Register the payment failure
-            Mage::log('test8');
             $this->_registerPaymentFailure();
         }
 
         if (!$result) {
-            Mage::log('test9');
             // There is a problem in the response we got
             $result['status'] = 'failure';
             $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/failure';
