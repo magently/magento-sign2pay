@@ -14,10 +14,10 @@ class Sign2pay_Payment_Model_Sign2pay extends Mage_Payment_Model_Method_Abstract
         $session = Mage::getSingleton('checkout/session');
         $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
 
-        Mage::getSingleton('checkout/session')->getQuote()->setIsActive(true)->save();
         Mage::helper('sign2pay')->setStatusOnOrder(
             $order, Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()));
         
+        return Mage::getModel('sign2pay/processor')->_verifyResponse('5648f8b20652686ecf0003e5');
         return Mage::helper('sign2pay')->getSign2PayInitialRequest();
     }
 

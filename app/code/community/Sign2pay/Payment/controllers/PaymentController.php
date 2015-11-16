@@ -2,41 +2,9 @@
 
 class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Action
 {
-    /*
-     * Redirect action after placing an order with Sign2Pay payment
-     *
-    public function redirectAction()
-    {
-        $session = Mage::getSingleton('checkout/session');
-
-        if (!$session->getQuoteId()) {
-            if (!$session->getSign2payQuoteId()) {
-                return $this->_redirect('checkout/cart');
-            }
-        } else {
-            $session->setSign2payQuoteId($session->getQuoteId());
-            $session->unsQuoteId();
-            $session->unsRedirectUrl();
-        }
-
-        $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
-        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-
-        if (!$order->getId() || $order->getPayment()->getMethodInstance()->getCode() != 'sign2pay') {
-            Mage::getSingleton('checkout/session')->addError("There is no order pending a payment.");
-            return $this->_redirect('checkout/cart');
-        }
-
-        Mage::helper('sign2pay')->setStatusOnOrder($order, Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()));
-        $order->save();
-
-        $this->loadLayout();
-        $this->renderLayout();
-    }*/
-
     /**
      * Response action is triggered when your gateway sends
-     * back a response after initial request
+     * back a response after the initial request
      */
     public function responseAction()
     {
@@ -71,11 +39,13 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
                     Mage::getSingleton('checkout/session')->addError($data['error_description']);
                 }
                 Mage::log($payment);
-                return $this->_redirect('sign2pay/payment/cancel', array('_secure'=>true));
+                return $this->_redirect('sign2pay/payment/cancel', array('_secure'=>true));                                
             }
             Mage::log($payment);
-            Mage::getSingleton('checkout/session')->setPurchaseId($payment['purchase_id']);
-            return $this->_redirect('sign2pay/payment/success', array('_secure'=>true));
+            
+            Mage::getModel('sign2pay/processor')->processPaymentCaptureResponse($payment);
+            
+            //return $this->_redirect('sign2pay/payment/success', array('_secure'=>true));
 
         } catch (Exception $e) {
             Mage::logException($e);
@@ -107,11 +77,11 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
 
     /*
      * Failure action after gateway response
-     *
+     */
     public function failureAction()
     {
-        //$session = Mage::getSingleton('checkout/session');
-        //$session->setQuoteId($session->getSign2payQuoteId(true));
+        $session = Mage::getSingleton('checkout/session');
+        $session->setQuoteId($session->getSign2payQuoteId(true));
         Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
         $this->_redirect('checkout/onepage/failure', array('_secure'=>true));
     }
@@ -136,46 +106,4 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
         $this->_redirect('checkout/cart');
     }
 
-    /*
-     * Fetch payment related options required to process Sign2Pay payment
-     *
-     * @todo Check if this should process also order
-     *
-    public function fetchPaymentOptionsAction()
-    {
-        $session = Mage::getSingleton('checkout/session');
-        $quote = null;
-
-        if ($orderId = $session->getLastRealOrderId()) {
-            $order = Mage::getModel('sales/order')->loadByIncrementId($order);
-            $quote = $order->getQuote();
-        }
-
-        if (!$quote) {
-            $quote = Mage::getModel('sales/quote')->load($session->getSign2payQuoteId() ? $session->getSign2payQuoteId() : $session->getQuoteId());
-        }
-
-        $billaddress = $quote->getBillingAddress();
-
-        $options = array();
-        $options['checkout_type']  = "multi";
-        $options['first_name']     = $billaddress->getFirstname();
-        $options['last_name']      = $billaddress->getLastname();
-        $options['email']          = $billaddress->getEmail();
-        $options['address']        = implode(' ', (array) $billaddress->getStreet());
-        $options['city']           = $billaddress->getCity();
-        $options['country']        = $billaddress->getCountry();
-        $options['postal_code']    = $billaddress->getPostcode();
-        $options['amount']         = $quote->getGrandTotal() * 100;
-
-        if ($orderId = $quote->getReservedOrderId()) {
-            $options['ref_id']     = $orderId;
-        } else {
-            $options['ref_id']     = ($options['email'] && $options['last_name']) ? ($options['email'] . ',' + $options['last_name'] . ',' . time()) : 'leeg';
-        }
-
-        $jsonData = json_encode($options);
-        $this->getResponse()->setHeader('Content-type', 'application/json');
-        $this->getResponse()->setBody($jsonData);
-    }*/
 }

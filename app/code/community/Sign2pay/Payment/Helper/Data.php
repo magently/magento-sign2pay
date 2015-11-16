@@ -168,7 +168,6 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         
         Mage::log($quote->getData());
         $amount = $quote['grand_total']*100;
-        $amount = preg_replace('/[^0-9]/', '', $amount);
         $ref_id = $this->sign2PayCheckoutHash($quote['reserved_order_id']);
 
         $billing = $quote->getBillingAddress();
