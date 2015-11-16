@@ -120,6 +120,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
                 Mage::getModel('sign2pay/processor')->cancel($order);
             }
             Mage::helper('sign2pay/checkout')->restoreQuote();
+            Mage::getSingleton('checkout/session')->addError("You've cancelled the Sign2Pay screen.");
 
         }
         $this->_redirect('checkout/cart');
