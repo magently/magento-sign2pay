@@ -48,7 +48,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
             $data = $this->getRequest()->getParams();
             if (!is_array($data) || $data['state'] !== Mage::getSingleton('checkout/session')->getSign2PayUserHash()
             || array_key_exists('error', $data)){
-                
+
                 if(is_array($data)){
                     Mage::getSingleton('checkout/session')->addError($data['error_description']);
                 }
@@ -58,7 +58,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
 
             $result = json_decode(Mage::getModel('sign2pay/processor')->processTokenExchangeRequest($data), true);
             if (!is_array($result) || array_key_exists('error', $result)){
-                
+
                 if(is_array($result)){
                     Mage::getSingleton('checkout/session')->addError($data['error_description']);
                 }
@@ -72,9 +72,9 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
                     Mage::getSingleton('checkout/session')->addError($data['error_description']);
                 }
                 Mage::log($payment);
-                return $this->_redirect('sign2pay/payment/cancel', array('_secure'=>true));                                
+                return $this->_redirect('sign2pay/payment/cancel', array('_secure'=>true));
             }
-            
+
             Mage::getModel('sign2pay/processor')->processPaymentCaptureResponse($payment);
             return $this->_redirect('sign2pay/payment/success', array('_secure'=>true));
 
@@ -90,19 +90,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
      */
     public function successAction()
     {
-
-        try{
-            Mage::getModel('sign2pay/processor')->_registerPaymentCapture();
-        }catch (Exception $e){
-            Mage::log($e);
-        }
-
         Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
-        
-        $session = Mage::getSingleton('checkout/session');
-        
-        $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
-       
         $this->_redirect('checkout/onepage/success', array('_secure'=>true));
     }
 
