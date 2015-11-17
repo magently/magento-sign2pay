@@ -163,44 +163,41 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return string
      */
-    public function getSign2PayInitialRequest(){
-        $quote = Mage::getSingleton('checkout/session')->getQuote();
-        
-        Mage::log($quote->getData());
-        $amount = $quote['grand_total']*100;
-        $amount = preg_replace('/[^0-9]/', '', $amount);
-        $ref_id = $this->sign2PayCheckoutHash($quote['reserved_order_id']);
+    public function getSign2PayInitialRequest()
+    {
+        $session = Mage::getSingleton('checkout/session');
+        $quote = null;
 
-        $billing = $quote->getBillingAddress();
+        if ($orderId = $session->getLastRealOrderId()) {
+            $order = Mage::getModel('sales/order')->loadByIncrementId($order);
+            $quote = $order->getQuote();
+        }
 
-        $baseUrl = 'https://app.sign2pay.com/oauth/authorize';
-        $client_id = $this->getSign2payClientId();
-        $redirect_uri = $this->getRedirectUri();
+        if (!$quote) {
+            $quote = Mage::getModel('sales/quote')->load($session->getSign2payQuoteId() ? $session->getSign2payQuoteId() : $session->getQuoteId());
+        }
 
-        $scope = 'payment';
-        $state = $this->userStateHash();
-        $response_type = 'code';
-        $device_uid = 'test';
+        $billaddress = $quote->getBillingAddress();
 
-        $query = http_build_query(array(
-            'client_id' => $client_id,
-            'redirect_uri' => $redirect_uri,
-            'scope' => $scope,
-            'amount' => $amount,
-            'state' => $state,
-            'ref_id' => $ref_id,
-            'response_type' => $response_type,
-            'device_uid' => $device_uid,            
-            'user_params[identifier]' => $billing['email'],
-            'user_params[first_name]' => $billing['firstname'],
-            'user_params[last_name]' => $billing['lastname'],
-            'user_params[address]' => $billing['street'],
-            'user_params[city]' => $billing['city'],
-            'user_params[postal_code]' => $billing['postcode']
-            )
-        );
-        return $baseUrl.'?'.$query;
+        $options = array();
+        $options['client_id']                   = $this->getSign2payClientId();
+        $options['redirect_uri']                = $this->getRedirectUri();
+        $options['amount']                      = $quote->getGrandTotal() * 100;
+        $options['response_type']               = 'code';
+        $options['device_uid']                  = 'test';
+        $options['state']                       = $this->userStateHash();
+        $options['scope']                       = 'payment';
+        $options['ref_id']                      = $this->sign2PayCheckoutHash($quote->getReservedOrderId());
 
+        $options['user_params[identifier]']     = $billaddress->getEmail();
+        $options['user_params[first_name]']     = $billaddress->getFirstname();
+        $options['user_params[last_name]']      = $billaddress->getLastname();
+        $options['user_params[address]']        = implode(' ', (array) $billaddress->getStreet());
+        $options['user_params[city]']           = $billaddress->getCity();
+        $options['user_params[country]']        = $billaddress->getCountry();
+        $options['user_params[postal_code]']    = $billaddress->getPostcode();
+
+        return 'https://app.sign2pay.com/oauth/authorize?' . http_build_query($options);
     }
 
 }

@@ -79,7 +79,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
 
         $quote = Mage::getSingleton('checkout/session')->getQuote();
-        $amount = preg_replace('/[^0-9]/', '', $quote['grand_total']);
+        $amount = $quote['grand_total']*100;
         
         $ref_id = Mage::getSingleton('checkout/session')->getSign2PayCheckoutHash();
 
@@ -116,52 +116,32 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
      * @todo Add gateway authentication
      * @todo Add order state validation
      */
-    public function processRequest(array $request)
+    public function processPaymentCaptureResponse(array $request)
     {
         $this->_request = $request;
 
-        $apiKey =  Mage::helper('sign2pay')->getSign2payApiKey();
-
-        $orderId    = $this->getRequestData('ref_id');
-        $merchantId = $this->getRequestData('merchant_id');
-        $purchaseId = $this->getRequestData('purchase_id');
-
-        $amount     = $this->getRequestData('amount');
-        $status     = $this->getRequestData('status');
-        $token      = $this->getRequestData('token');
-        $timestamp  = $this->getRequestData('timestamp');
-        $signature  = $this->getRequestData('signature');
-
+        $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+        $purchase_id = $this->getRequestData('purchase_id');
+        Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
+        
         // Load appropriate order
         $this->_order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-
         if (!$this->_order->getId()) {
             throw new Exception('Requested order with id ' . $orderId . ' does not exists.');
         }
-
         $result = array();
 
-        if ($this->_verifyResponse($apiKey, $token, $timestamp, $signature)) {
-            if ($status == 'mandate_valid') {
-                // Payment was successful, so update the order's state
-                // and send order email and move to the success page
-                $result['status'] = 'success';
-                $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/success';
-                $result['params'] = array(
-                    'total'         => $amount,
-                    'id'            => $orderId,
-                    'purchase_id'   => $purchaseId,
-                    'signature'     => true,
-                    'status'        => $status,
-                    'authorization' => $timestamp,
-                );
-
-                // Register the payment capture
-                $this->_registerPaymentCapture();
-            } else {
-                // Register the payment failure
-                $this->_registerPaymentDenial();
-            }
+        if ($this->_verifyResponse($purchase_id)) {
+            // Payment was successful, so update the order's state
+            // and send order email and move to the success page
+            $result['status'] = 'success';
+            $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/success';
+            $result['params'] = array(
+                'purchase_id'   => $purchaseId
+            );
+            Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
+            // Register the payment capture
+            $this->_registerPaymentCapture();
         } else {
             // Register the payment failure
             $this->_registerPaymentFailure();
@@ -201,9 +181,28 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
      * @param string $signature
      * @return boolean
      */
-    protected function _verifyResponse($apiKey, $token, $timestamp, $signature)
+    public function _verifyResponse($purchase_id)
     {
-        return $signature === Mage::helper('sign2pay')->getSign2paySignature($apiKey, $token, $timestamp);
+        $client_id = Mage::helper('sign2pay')->getSign2payClientId();
+        $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
+
+        $client = new Varien_Http_Client('https://app.sign2pay.com/api/v2/payment/status/'.$purchase_id);
+        $client->setMethod(Varien_Http_Client::GET);
+        $client->setAuth($client_id,$client_secret);
+
+        try{
+            $response = $client->request();
+            $body = json_decode($response->getBody());
+            if(array_key_exists('status', $body) || $body['status'] == 'processing'){
+                return true;
+            }
+            else{
+                return false;
+            }            
+        } catch (Zend_Http_Client_Exception $e) {
+            Mage::logException($e);
+            return false;
+        }
     }
 
     /**

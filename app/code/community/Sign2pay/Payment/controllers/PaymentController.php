@@ -2,9 +2,9 @@
 
 class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Action
 {
-    /*
+    /**
      * Redirect action after placing an order with Sign2Pay payment
-     *
+     */
     public function redirectAction()
     {
         $session = Mage::getSingleton('checkout/session');
@@ -30,13 +30,13 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
         Mage::helper('sign2pay')->setStatusOnOrder($order, Mage::getStoreConfig('payment/sign2pay/order_status', Mage::app()->getStore()));
         $order->save();
 
-        $this->loadLayout();
-        $this->renderLayout();
-    }*/
+        $this->_redirectUrl(Mage::helper('sign2pay')->getSign2PayInitialRequest());
+    }
+
 
     /**
      * Response action is triggered when your gateway sends
-     * back a response after initial request
+     * back a response after the initial request
      */
     public function responseAction()
     {
@@ -47,7 +47,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
             $data = $this->getRequest()->getParams();
             if (!is_array($data) || $data['state'] !== Mage::getSingleton('checkout/session')->getSign2PayUserHash()
             || array_key_exists('error', $data)){
-                
+
                 if(is_array($data)){
                     Mage::getSingleton('checkout/session')->addError($data['error_description']);
                 }
@@ -57,7 +57,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
 
             $result = json_decode(Mage::getModel('sign2pay/processor')->processTokenExchangeRequest($data), true);
             if (!is_array($result) || array_key_exists('error', $result)){
-                
+
                 if(is_array($result)){
                     Mage::getSingleton('checkout/session')->addError($data['error_description']);
                 }
@@ -73,8 +73,8 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
                 Mage::log($payment);
                 return $this->_redirect('sign2pay/payment/cancel', array('_secure'=>true));
             }
-            Mage::log($payment);
-            Mage::getSingleton('checkout/session')->setPurchaseId($payment['purchase_id']);
+
+            Mage::getModel('sign2pay/processor')->processPaymentCaptureResponse($payment);
             return $this->_redirect('sign2pay/payment/success', array('_secure'=>true));
 
         } catch (Exception $e) {
@@ -89,29 +89,17 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
      */
     public function successAction()
     {
-
-        try{
-            Mage::getModel('sign2pay/processor')->_registerPaymentCapture();
-        }catch (Exception $e){
-            Mage::log($e);
-        }
-
         Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
-        
-        $session = Mage::getSingleton('checkout/session');
-        
-        $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
-       
         $this->_redirect('checkout/onepage/success', array('_secure'=>true));
     }
 
     /*
      * Failure action after gateway response
-     *
+     */
     public function failureAction()
     {
-        //$session = Mage::getSingleton('checkout/session');
-        //$session->setQuoteId($session->getSign2payQuoteId(true));
+        $session = Mage::getSingleton('checkout/session');
+        $session->setQuoteId($session->getSign2payQuoteId(true));
         Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
         $this->_redirect('checkout/onepage/failure', array('_secure'=>true));
     }
@@ -131,51 +119,10 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
                 Mage::getModel('sign2pay/processor')->cancel($order);
             }
             Mage::helper('sign2pay/checkout')->restoreQuote();
+            Mage::getSingleton('checkout/session')->addError("You've cancelled the Sign2Pay screen.");
 
         }
         $this->_redirect('checkout/cart');
     }
 
-    /*
-     * Fetch payment related options required to process Sign2Pay payment
-     *
-     * @todo Check if this should process also order
-     *
-    public function fetchPaymentOptionsAction()
-    {
-        $session = Mage::getSingleton('checkout/session');
-        $quote = null;
-
-        if ($orderId = $session->getLastRealOrderId()) {
-            $order = Mage::getModel('sales/order')->loadByIncrementId($order);
-            $quote = $order->getQuote();
-        }
-
-        if (!$quote) {
-            $quote = Mage::getModel('sales/quote')->load($session->getSign2payQuoteId() ? $session->getSign2payQuoteId() : $session->getQuoteId());
-        }
-
-        $billaddress = $quote->getBillingAddress();
-
-        $options = array();
-        $options['checkout_type']  = "multi";
-        $options['first_name']     = $billaddress->getFirstname();
-        $options['last_name']      = $billaddress->getLastname();
-        $options['email']          = $billaddress->getEmail();
-        $options['address']        = implode(' ', (array) $billaddress->getStreet());
-        $options['city']           = $billaddress->getCity();
-        $options['country']        = $billaddress->getCountry();
-        $options['postal_code']    = $billaddress->getPostcode();
-        $options['amount']         = $quote->getGrandTotal() * 100;
-
-        if ($orderId = $quote->getReservedOrderId()) {
-            $options['ref_id']     = $orderId;
-        } else {
-            $options['ref_id']     = ($options['email'] && $options['last_name']) ? ($options['email'] . ',' + $options['last_name'] . ',' . time()) : 'leeg';
-        }
-
-        $jsonData = json_encode($options);
-        $this->getResponse()->setHeader('Content-type', 'application/json');
-        $this->getResponse()->setBody($jsonData);
-    }*/
 }
