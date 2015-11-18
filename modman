@@ -1,0 +1,7 @@
+app/code/community/Sign2pay/Payment app/code/community/Sign2pay/Payment
+app/design/adminhtml/default/default/layout/sign2pay.xml app/design/adminhtml/default/default/layout/sign2pay.xml
+app/design/adminhtml/default/default/template/sign2pay app/design/adminhtml/default/default/template/sign2pay
+app/design/frontend/base/default/layout/sign2pay.xml app/design/frontend/base/default/layout/sign2pay.xml
+app/design/frontend/base/default/template/sign2pay app/design/frontend/base/default/template/sign2pay
+app/etc/modules/Sign2pay_Payment.xml app/etc/modules/Sign2pay_Payment.xml
+js/sign2pay js/sign2pay

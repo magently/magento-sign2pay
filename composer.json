@@ -1,0 +1,12 @@
+{
+  "name": "sign2pay/sign2pay",
+  "description": "",
+  "type": "magento-module",
+  "authors": [
+    {
+      "name": "Sign2Pay",
+      "email": "info@sign2pay.com"
+    }
+  ],
+  "minimum-stability": "stable"
+}
