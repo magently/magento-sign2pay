@@ -5,7 +5,8 @@ class Sign2pay_Payment_Block_Form_Sign2pay extends Mage_Payment_Block_Form
     protected function _construct()
     {
         parent::_construct();
-        $this->setTemplate('sign2pay/form/sign2pay.phtml');
+        $this->setTemplate('sign2pay/form/sign2pay.phtml')
+            ->setMethodLabelAfterHtml('<img src="https://app.sign2pay.com/api/v2/banks/logo.gif" alt="Sign2pay" height="20" style="margin-right: 0.4em;"/>');
     }
 
     protected function _prepareLayout()
