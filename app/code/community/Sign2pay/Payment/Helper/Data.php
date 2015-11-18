@@ -185,7 +185,7 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         $options['amount']                      = $quote->getGrandTotal() * 100;
         $options['response_type']               = 'code';
         $options['device_uid']                  = 'test';
-        $options['locale']                      = Mage::app()->getLocale()->getLocaleCode();
+        $options['locale']                      = preg_replace('/_.*$/', '', Mage::app()->getLocale()->getLocaleCode());
         $options['state']                       = $this->userStateHash();
         $options['scope']                       = 'payment';
         $options['ref_id']                      = $this->sign2PayCheckoutHash($quote->getReservedOrderId());
