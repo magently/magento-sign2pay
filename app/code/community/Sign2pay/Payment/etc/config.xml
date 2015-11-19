@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Sign2pay_Payment>
-            <version>0.7.0</version>
+            <version>0.7.3</version>
         </Sign2pay_Payment>
     </modules>
 

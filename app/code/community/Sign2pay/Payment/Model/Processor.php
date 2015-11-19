@@ -31,7 +31,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
     /**
      * Exchange hashed credentials for token (second step of Authrature)
      *
-     * 
+     *
      * @return string (encoded json)
      */
     public function processTokenExchangeRequest(array $data){
@@ -54,7 +54,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         /*==========================================start request preparation==========================*/
         $client = new Varien_Http_Client('https://app.sign2pay.com/oauth/token');
         $client->setMethod(Varien_Http_Client::POST);
-        
+
         $client->setAuth($client_id,$client_secret);
         $client->setParameterPost($request_body);
 
@@ -70,7 +70,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
     /**
      * Exchange token for payment id (third step of Authrature)
      *
-     * 
+     *
      * @return string (encoded json)
      */
     public function processPaymentRequest(array $data){
@@ -78,19 +78,17 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         $client_id = Mage::helper('sign2pay')->getSign2payClientId();
         $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
 
-        $quote = Mage::getSingleton('checkout/session')->getQuote();
-        $amount = $quote['grand_total']*100;
-        
+        $quote = Mage::helper('sign2pay')->getQuote();
+
         $ref_id = Mage::getSingleton('checkout/session')->getSign2PayCheckoutHash();
 
         $request_body = array(
             'client_id' => $client_id,
-            'amount' => $amount,
+            'amount' => $quote->getGrandTotal() * 100,
             'ref_id' => $ref_id,
             'token' => $data['access_token']['token']
         );
         //end variables preparation
-
 
         /*==========================================start request preparation==========================*/
         $client = new Varien_Http_Client('https://app.sign2pay.com/api/v2/payment/authorize/capture');
@@ -123,7 +121,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
         $purchase_id = $this->getRequestData('purchase_id');
         Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
-        
+
         // Load appropriate order
         $this->_order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         if (!$this->_order->getId()) {
@@ -198,7 +196,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
             }
             else{
                 return false;
-            }            
+            }
         } catch (Zend_Http_Client_Exception $e) {
             Mage::logException($e);
             return false;
