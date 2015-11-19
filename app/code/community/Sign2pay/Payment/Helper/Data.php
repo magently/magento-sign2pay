@@ -158,12 +158,11 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Prepare and return initial Sign2Pay request
-     * @todo device unical id
+     * Get current quote
      *
-     * @return string
+     * @return Mage_Sales_Model_Quote $quote
      */
-    public function getSign2PayInitialRequest()
+    public function getQuote()
     {
         $session = Mage::getSingleton('checkout/session');
         $quote = null;
@@ -176,6 +175,19 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         if (!$quote) {
             $quote = Mage::getModel('sales/quote')->load($session->getSign2payQuoteId() ? $session->getSign2payQuoteId() : $session->getQuoteId());
         }
+
+        return $quote;
+    }
+
+    /**
+     * Prepare and return initial Sign2Pay request
+     * @todo device unical id
+     *
+     * @return string
+     */
+    public function getSign2PayInitialRequest()
+    {
+        $quote = $this->getQuote();
 
         $billaddress = $quote->getBillingAddress();
 
