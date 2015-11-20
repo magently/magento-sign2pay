@@ -125,4 +125,15 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
         $this->_redirect('checkout/cart');
     }
 
+    /**
+     * Fetch payment logo url
+     */
+    public function fetchPaymentLogoAction()
+    {
+        $options['logo'] = Mage::helper('sign2pay')->getPaymentLogoUrl();
+
+        $jsonData = json_encode($options);
+        $this->getResponse()->setHeader('Content-type', 'application/json');
+        $this->getResponse()->setBody($jsonData);
+    }
 }

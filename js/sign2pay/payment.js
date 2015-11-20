@@ -6,7 +6,7 @@
         throw new Error('Sign2Pay: ' + msg);
     }
 
-    var Sign2Pay = (function (settings) {
+    var Sign2Pay = (function () {
 
         /**
          * Sign2Pay constructor
@@ -15,63 +15,25 @@
          */
 
         function Sign2Pay(settings) {
-            this.merchantId = settings.merchantId || throwError('No merchant id');
-            this.token = settings.token || throwError('No token');
             this.baseUrl = settings.baseUrl || throwError('No base url');
 
             // Remove protocol from base url
             this.baseUrl = this.baseUrl.replace(/^http:/, '');
-
-            if (settings.initialize) this.initializePayment();
         }
 
         /**
-         * @var Default options
-         */
-
-        Sign2Pay.prototype.defaultOptions = {
-            domain: "sign2pay.com",
-            el: "#sign2pay"
-        }
-
-        /**
-         * Initialize Sign2Pay transport with given options
-         *
-         * @param object options
-         */
-        Sign2Pay.prototype.initTransport = function(options) {
-            if (!this.scriptAttached) {
-                this.scriptAttached = true;
-                $('head').append('<script type="text/javascript" src="https://sign2pay.com/merchant.js" async></script>');
-            }
-
-            var interval;
-            interval = setInterval(function() {
-                if (typeof window.s2p !== 'object' || typeof window.s2p.options !== 'object') return;
-                clearInterval(interval);
-                window.sign2PayOptions = options;
-                window.s2p.options.initTransport();
-            });
-        }
-
-        /**
-         * Fetches all payment related options
+         * Fetches payment logo
          *
          * @param function callback
          */
 
-        Sign2Pay.prototype.fetchPaymentOptions = function(callback) {
+        Sign2Pay.prototype.fetchPaymentLogo = function(callback) {
             var self = this;
 
-            $.ajax(this.baseUrl + 'sign2pay/payment/fetchPaymentOptions', {
+            $.ajax(this.baseUrl + 'sign2pay/payment/fetchPaymentLogo', {
                 type: 'POST',
                 dataType: 'json',
                 success: function(options) {
-                    var options = $.extend(self.defaultOptions, options, {
-                        merchant_id: self.merchantId,
-                        token: self.token
-                    });
-
                     callback(options);
                 },
                 error: function(err) {
@@ -82,117 +44,46 @@
         }
 
         /**
-         * Perform riskAssessment
+         * Perform logo update
          */
 
-        Sign2Pay.prototype.riskAssessment = function() {
+        Sign2Pay.prototype.logoUpdate = function() {
             var self = this;
 
-            // Disable payment method
-            $('input[name="payment[method]"][value="sign2pay"]').attr('disabled', 'disabled');
+            var $mark = $('#sign2pay-mark');
+
+            if (!$mark.size()) return;
 
             var callback = function(options) {
-                var errors = [];
-
-                $.each(options, function(key, value) {
-                    if (!value) {
-                        errors.push(key);
-                    }
-                });
-
-                if (errors.length) {
-                    console.log('[RA] Missing values for: ' + errors.join(', '));
-                    return;
-                }
-
-                options['success'] = function() {
-                    // Enable the Sign2Pay payment method
-                    $('input[name="payment[method]"][value="sign2pay"]').removeAttr('disabled');
-                };
-
-                options['checkout_type'] = 'multi';
-
-                self.initTransport(options);
+                $mark.attr('src', options.logo);
             }
 
-            this.fetchPaymentOptions(callback);
+            this.fetchPaymentLogo(callback);
         };
 
         /**
-         * Initialize payment
+         * Perform updates
          */
 
-        Sign2Pay.prototype.initializePayment = function() {
-            var self = this;
-
-            var unloadCallback = function() {
-                return 'Leaving this screen might prevent you from completing this purchase.';
-            };
-
-            var closeCallback = function() {};
-
-            var cancelCallback = function() {
-                $(window).unbind('beforeunload', unloadCallback);
-                window.location = self.baseUrl + "sign2pay/payment/cancel";
-            };
-
-            var callback = function(options) {
-                options['launch'] = "on_load";
-                options['map'] = {};
-
-                options['success']  = function() {
-                    var el = $(this.el).get(0);
-                    $('.s2p-button-text', el).remove();
-                    $('.s2p-button-banks', el)
-                        .append('<span class="button btn-cart btn-pay">Pay with Sign2Pay</span>')
-                        .append('<span class="button btn-cart btn-cancel">Cancel</span>')
-                        .children('.btn-cancel')
-                        .on('click', function() {
-                            cancelCallback();
-                            return false;
-                        });
-                    $('.loading, .s2p-text', el).remove();
-                };
-
-                options['error']  = function() {
-                    alert('There was a problem during Sign2Pay initialization. Your ref_id is ' + options['ref_id'] + '.');
-
-                    closeCallback = cancelCallback;
-
-                    var el = $(this.el).get(0);
-                    $(".loading", el).hide();
-                };
-
-                options['close'] = function(a) {
-                    closeCallback();
-                };
-
-                self.initTransport(options);
-            };
-
-            $(window).on('beforeunload', unloadCallback);
-            this.fetchPaymentOptions(callback);
-        }
+        Sign2Pay.prototype.update = function() {
+            this.logoUpdate();
+        };
 
         return Sign2Pay;
     })();
 
     $(window).load(function() {
-        if (!s2pOptions || !s2pOptions['merchantId'] || !s2pOptions['token']) {
-            throwError('The Sign2Pay Module is enabled, but you are missing required settings.');
-        } else {
-            window.sign2payPayment = new Sign2Pay(s2pOptions);
-        }
+        window.sign2payPayment = new Sign2Pay(s2pOptions);
     });
 
-    window.initializeRiskAssessment = function() {
+    window.updateSign2pay = function() {
         var interval;
         interval = setInterval(function() {
             if (typeof window.sign2payPayment !== 'object') return;
             clearInterval(interval);
 
-            // Perform risk assessment
-            window.sign2payPayment.riskAssessment();
+            // Perform update
+            window.sign2payPayment.update();
         });
     };
 

@@ -64,6 +64,8 @@
                 <payment_action>sale</payment_action>
                 <includeJquery>1</includeJquery>
                 <onepage_type>mage_world</onepage_type>
+                <logo_enabled>1</logo_enabled>
+                <logo_width>20</logo_width>
             </sign2pay>
          </payment>
     </default>

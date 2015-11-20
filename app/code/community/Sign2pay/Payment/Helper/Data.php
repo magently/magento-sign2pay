@@ -2,36 +2,7 @@
 
 class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 {
-
-    /**
-     * Retrive Sign2Pay merchant id.
-     *
-     * @return string
-     */
-    public function getSign2payMerchantId()
-    {
-        return Mage::getStoreConfig('payment/sign2pay/merchant_id',Mage::app()->getStore());
-    }
-
-    /**
-     * Retrive Sign2Pay token.
-     *
-     * @return string
-     */
-    public function getSign2payToken()
-    {
-        return Mage::getStoreConfig('payment/sign2pay/application_token',Mage::app()->getStore());
-    }
-
-    /**
-     * Retrive Sign2Pay api key.
-     *
-     * @return string
-     */
-    public function getSign2payApiKey()
-    {
-        return Mage::getStoreConfig('payment/sign2pay/api_token',Mage::app()->getStore());
-    }
+    const LOGO_URL = 'https://app.sign2pay.com/api/v2/banks/logo.gif';
 
     /**
      * Retrive Sign2Pay Client ID.
@@ -51,19 +22,6 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     public function getSign2payClientSecret()
     {
         return Mage::getStoreConfig('payment/sign2pay/client_secret',Mage::app()->getStore());
-    }
-
-    /**
-     * Retrive sign2pay options.
-     *
-     * @return array
-     */
-    public function getSign2PayOptions()
-    {
-        return array(
-            'merchantId' => $this->getSign2payMerchantId(),
-            'token' => $this->getSign2payToken(),
-        );
     }
 
     /**
@@ -97,15 +55,10 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function attachPaymentScripts(array $additional = array())
     {
-        /**
-         * @todo Properly remove/update this functionality
-         */
-        return;
-
         Mage::app()->getLayout()->getBlock('head')->addJs('sign2pay/jquery.min.js');
         Mage::app()->getLayout()->getBlock('head')->addJs('sign2pay/payment.js');
 
-        $options = $additional + $this->getSign2PayOptions();
+        $options = $additional;
         $options['baseUrl'] = Mage::getBaseUrl();
 
         $script = 'window.s2pOptions = ' . json_encode($options) . ';';
@@ -180,27 +133,19 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Prepare and return initial Sign2Pay request
-     * @todo device unical id
+     * Get all payment options applicable to sign2pay request
      *
-     * @return string
+     * @return array
      */
-    public function getSign2PayInitialRequest()
+    public function getPaymentOptions()
     {
         $quote = $this->getQuote();
 
         $billaddress = $quote->getBillingAddress();
 
         $options = array();
-        $options['client_id']                   = $this->getSign2payClientId();
-        $options['redirect_uri']                = $this->getRedirectUri();
         $options['amount']                      = $quote->getGrandTotal() * 100;
-        $options['response_type']               = 'code';
-        $options['device_uid']                  = 'test';
         $options['locale']                      = preg_replace('/_.*$/', '', Mage::app()->getLocale()->getLocaleCode());
-        $options['state']                       = $this->userStateHash();
-        $options['scope']                       = 'payment';
-        $options['ref_id']                      = $this->sign2PayCheckoutHash($quote->getReservedOrderId());
 
         $options['user_params[identifier]']     = $billaddress->getEmail();
         $options['user_params[first_name]']     = $billaddress->getFirstname();
@@ -209,6 +154,38 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         $options['user_params[city]']           = $billaddress->getCity();
         $options['user_params[country]']        = $billaddress->getCountry();
         $options['user_params[postal_code]']    = $billaddress->getPostcode();
+
+        return $options;
+    }
+
+    /**
+     * Get payment logo url
+     *
+     * @return string
+     */
+    public function getPaymentLogoUrl()
+    {
+        $options = $this->getPaymentOptions();
+        return static::LOGO_URL . (!empty($options['user_params[identifier]']) ? ('?email=' . md5($options['user_params[identifier]'])) : '');
+    }
+
+    /**
+     * Prepare and return initial Sign2Pay request
+     * @todo device unical id
+     *
+     * @return string
+     */
+    public function getSign2PayInitialRequest()
+    {
+        $options = $this->getPaymentOptions();
+
+        $options['client_id']                   = $this->getSign2payClientId();
+        $options['redirect_uri']                = $this->getRedirectUri();
+        $options['ref_id']                      = $this->sign2PayCheckoutHash($quote->getReservedOrderId());
+        $options['response_type']               = 'code';
+        $options['device_uid']                  = 'test';
+        $options['state']                       = $this->userStateHash();
+        $options['scope']                       = 'payment';
 
         return 'https://app.sign2pay.com/oauth/authorize?' . http_build_query($options);
     }

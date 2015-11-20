@@ -15,9 +15,7 @@ class Sign2pay_Payment_Block_Redirect extends Mage_Core_Block_Template
         parent::_prepareLayout();
 
         $this->setTemplate('sign2pay/redirect.phtml');
-        Mage::helper('sign2pay')->attachPaymentScripts(array(
-            'initialize' => true
-        ));
+        Mage::helper('sign2pay')->attachPaymentScripts();
 
         return $this;
     }
