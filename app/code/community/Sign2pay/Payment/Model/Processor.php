@@ -84,7 +84,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
 
         $request_body = array(
             'client_id' => $client_id,
-            'amount' => $quote->getGrandTotal() * 100,
+            'amount' => Mage::helper('sign2pay')->getPaymentAmount(),
             'ref_id' => $ref_id,
             'token' => $data['access_token']['token']
         );

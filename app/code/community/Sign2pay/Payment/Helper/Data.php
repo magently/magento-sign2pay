@@ -133,6 +133,17 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Get payment amount
+     *
+     * @return int
+     */
+    public function getPaymentAmount()
+    {
+        $quote = $this->getQuote();
+        return $quote->getGrandTotal() * 100;
+    }
+
+    /**
      * Get all payment options applicable to sign2pay request
      *
      * @return array
@@ -144,7 +155,7 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         $billaddress = $quote->getBillingAddress();
 
         $options = array();
-        $options['amount']                      = $quote->getGrandTotal() * 100;
+        $options['amount']                      = $this->getPaymentAmount();
         $options['locale']                      = preg_replace('/_.*$/', '', Mage::app()->getLocale()->getLocaleCode());
 
         $options['user_params[identifier]']     = $billaddress->getEmail();
