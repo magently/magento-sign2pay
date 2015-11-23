@@ -154,6 +154,14 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 
         $billaddress = $quote->getBillingAddress();
 
+        $telephone = trim($billaddress->getTelephone());
+        if (substr($telephone, 0, 1) !== "+") {
+            $country_code = Mage::helper('sign2pay/CountryCodes')->getCountryCallingCode($billaddress->getCountry());
+            if (substr($telephone, 0, strlen($country_code)) !== $country_code) {
+                $telephone = '+'.$country_code.$telephone;
+            }
+        }
+
         $options = array();
         $options['amount']                      = $this->getPaymentAmount();
         $options['locale']                      = preg_replace('/_.*$/', '', Mage::app()->getLocale()->getLocaleCode());
@@ -165,6 +173,7 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         $options['user_params[city]']           = $billaddress->getCity();
         $options['user_params[country]']        = $billaddress->getCountry();
         $options['user_params[postal_code]']    = $billaddress->getPostcode();
+        $options['user_params[mobile]']         = $telephone;
 
         return $options;
     }
