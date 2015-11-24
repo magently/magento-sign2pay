@@ -25,15 +25,15 @@ class Sign2pay_Payment_Model_Observer
                             | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL
                         ))
                     {
-                        $this->_addInitializeRiskAssessment($transport);
+                        $this->_addUpdate($transport);
                     }
                 } catch (Exception $e) {
                     // Add anyway
-                    $this->_addInitializeRiskAssessment($transport);
+                    $this->_addUpdate($transport);
                 }
             } else {
                 // Add anyway
-                $this->_addInitializeRiskAssessment($transport);
+                $this->_addUpdate($transport);
             }
         }
     }
@@ -41,9 +41,9 @@ class Sign2pay_Payment_Model_Observer
     /**
      * Add riska assessment trigger to transport
      */
-    protected function _addInitializeRiskAssessment($transport)
+    protected function _addUpdate($transport)
     {
-        $html = '<script type="text/javascript">if (typeof initializeRiskAssessment === \'function\') initializeRiskAssessment();</script>';
+        $html = '<script type="text/javascript">if (typeof updateSign2pay === \'function\') updateSign2pay();</script>';
         $transport->setHtml($transport->getHtml() . $html);
     }
 }

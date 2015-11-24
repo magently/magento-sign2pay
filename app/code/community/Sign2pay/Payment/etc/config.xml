@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Sign2pay_Payment>
-            <version>0.7.3</version>
+            <version>0.7.4</version>
         </Sign2pay_Payment>
     </modules>
 
@@ -64,6 +64,8 @@
                 <payment_action>sale</payment_action>
                 <includeJquery>1</includeJquery>
                 <onepage_type>mage_world</onepage_type>
+                <logo_enabled>1</logo_enabled>
+                <logo_width>20</logo_width>
             </sign2pay>
          </payment>
     </default>

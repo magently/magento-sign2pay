@@ -29,12 +29,67 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
     }
 
     /**
+     * General payment method responsible for the flow of the operations
+     *
+     * @param array returned by sign2pay api after the initial request
+     *
+     */
+    public function performPayment(array $initial_response)
+    {
+        try{
+            $this->validateInitialResponse($initial_response);
+            $token_response = json_decode($this->sendTokenExchangeRequest($initial_response), true);
+                if (empty($token_response['access_token']['token'])) {
+                    if (!empty($token_response['error_description'])) {
+                        throw new Exception($token_response['error_description']);
+                    }
+                    throw new Exception('Token is missing');
+                }
+
+            $payment = json_decode($this->sendPaymentRequest($token_response), true);
+                if (empty($payment['purchase_id'])) {
+                    if (!empty($payment['error_description'])) {
+                        throw new Exception($payment['error_description']);
+                    }
+                    throw new Exception('Purchase ID is missing');
+                }
+
+            return $this->processPaymentCaptureResponse($payment);
+        }
+        catch (Exception $e) {
+            Mage::getSingleton('checkout/session')->addError($e->getMessage());
+            return Mage::app()->getResponse()->setRedirect('cancel', array('_secure'=>true));
+        }
+    }
+
+
+    /**
+     * Validate the initial response
+     * add error to session and throw exception if something's not right
+     *
+     * @param array returned by sign2pay api after the initial request
+     *
+     */
+    public function validateInitialResponse(array $initial_response)
+    {
+        if ($initial_response['state'] !== Mage::getSingleton('checkout/session')->getSign2PayUserHash()
+            || array_key_exists('error', $initial_response)) {
+
+            if (!empty($initial_response['error_description'])) {
+                throw new Exception($initial_response['error_description']);
+            }
+            throw new Exception('Could not validate the response');
+        }
+    }
+
+    /**
      * Exchange hashed credentials for token (second step of Authrature)
      *
      *
      * @return string (encoded json)
      */
-    public function processTokenExchangeRequest(array $data){
+    public function sendTokenExchangeRequest(array $data)
+    {
         //start variables preparation
         $client_id = Mage::helper('sign2pay')->getSign2payClientId();
         $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
@@ -64,7 +119,6 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         } catch (Zend_Http_Client_Exception $e) {
             Mage::logException($e);
         }
-
     }
 
     /**
@@ -73,7 +127,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
      *
      * @return string (encoded json)
      */
-    public function processPaymentRequest(array $data){
+    public function sendPaymentRequest(array $data){
         //start variables preparation
         $client_id = Mage::helper('sign2pay')->getSign2payClientId();
         $client_secret = Mage::helper('sign2pay')->getSign2payClientSecret();
@@ -84,7 +138,7 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
 
         $request_body = array(
             'client_id' => $client_id,
-            'amount' => $quote->getGrandTotal() * 100,
+            'amount' => Mage::helper('sign2pay')->getPaymentAmount(),
             'ref_id' => $ref_id,
             'token' => $data['access_token']['token']
         );
@@ -96,17 +150,16 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
 
         $client->setAuth($client_id,$client_secret);
         $client->setParameterPost($request_body);
-        try{
+        try {
             $response = $client->request();
             return $response->getBody();
         } catch (Zend_Http_Client_Exception $e) {
             Mage::logException($e);
         }
-
     }
 
 
-    /*
+    /**
      * Get gateway data, validate and run corresponding handler
      *
      * @param array $request
@@ -119,43 +172,26 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         $this->_request = $request;
 
         $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
-        $purchase_id = $this->getRequestData('purchase_id');
-        Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
+        $purchaseId = $this->getRequestData('purchase_id');
+        Mage::getSingleton('checkout/session')->setPurchaseId($purchaseId);
 
         // Load appropriate order
         $this->_order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         if (!$this->_order->getId()) {
             throw new Exception('Requested order with id ' . $orderId . ' does not exists.');
         }
-        $result = array();
 
-        if ($this->_verifyResponse($purchase_id)) {
+        if ($this->_verifyResponse($purchaseId)) {
             // Payment was successful, so update the order's state
             // and send order email and move to the success page
-            $result['status'] = 'success';
-            $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/success';
-            $result['params'] = array(
-                'purchase_id'   => $purchaseId
-            );
-            Mage::getSingleton('checkout/session')->setPurchaseId($purchase_id);
+            Mage::getSingleton('checkout/session')->setPurchaseId($purchaseId);
             // Register the payment capture
             $this->_registerPaymentCapture();
         } else {
             // Register the payment failure
             $this->_registerPaymentFailure();
+            throw new Exception('Sorry, but we could not process your payment at this time.');
         }
-
-        if (!$result) {
-            // There is a problem in the response we got
-            $result['status'] = 'failure';
-            $result['redirect_to'] = Mage::getBaseUrl() . 'sign2pay/payment/failure';
-            $result['params'] = array(
-                'ref_id'    => $orderId,
-                'message'   => Mage::helper('sign2pay')->__('Sorry, but we could not process your payment at this time.'),
-            );
-        }
-
-        return $result;
     }
 
     /**
