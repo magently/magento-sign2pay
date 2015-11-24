@@ -156,11 +156,10 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         } catch (Zend_Http_Client_Exception $e) {
             Mage::logException($e);
         }
-
     }
 
 
-    /*
+    /**
      * Get gateway data, validate and run corresponding handler
      *
      * @param array $request
@@ -186,11 +185,6 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         if ($this->_verifyResponse($purchaseId)) {
             // Payment was successful, so update the order's state
             // and send order email and move to the success page
-            $result['status'] = 'success';
-            $result['redirect_to'] = 'sign2pay/payment/success';
-            $result['params'] = array(
-                'purchase_id'   => $purchaseId
-            );
             Mage::getSingleton('checkout/session')->setPurchaseId($purchaseId);
             // Register the payment capture
             $this->_registerPaymentCapture();
@@ -200,15 +194,8 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         }
 
         if (!$result) {
-            // There is a problem in the response we got
-            $result['status'] = 'failure';
-            $result['redirect_to'] = 'sign2pay/payment/failure';
-            $result['params'] = array(
-                'ref_id'    => $orderId,
-                'message'   => Mage::helper('sign2pay')->__('Sorry, but we could not process your payment at this time.'),
-            );
+            throw new Exception('Sorry, but we could not process your payment at this time.');
         }
-        return $result;
     }
 
     /**
