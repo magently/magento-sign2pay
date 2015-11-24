@@ -155,11 +155,12 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         $billaddress = $quote->getBillingAddress();
 
         $telephone = trim($billaddress->getTelephone());
-        if (substr($telephone, 0, 1) !== "+") {
-            $country_code = Mage::helper('sign2pay/CountryCodes')->getCountryCallingCode($billaddress->getCountry());
-            if (substr($telephone, 0, strlen($country_code)) !== $country_code) {
-                $telephone = '+'.$country_code.$telephone;
-            }
+        $telephone = preg_replace('/[^0-9+]/', '', $telephone);
+        $telephone = preg_replace('/^0*/', '+');
+
+        if (substr($telephone, 0, 1) !== '+') {
+            $country_code = Mage::helper('sign2pay/countryCodes')->getCountryCallingCode($billaddress->getCountry());
+            $telephone = '+' . $country_code . $telephone;
         }
 
         $options = array();

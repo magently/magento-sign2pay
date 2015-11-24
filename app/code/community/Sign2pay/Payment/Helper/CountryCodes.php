@@ -1,12 +1,12 @@
 <?php
 
-class Sign2pay_Payment_Helper_Countrycodes extends Mage_Core_Helper_Abstract
+class Sign2pay_Payment_Helper_CountryCodes extends Mage_Core_Helper_Abstract
 {
 	/**
 	 * Get calling code for specified country
 	 *
 	 * @param string containing two-digit country code
-	 * 
+	 *
 	 * @return calling code number or null
 	 */
 	public function getCountryCallingCode($country)
@@ -260,6 +260,7 @@ class Sign2pay_Payment_Helper_Countrycodes extends Mage_Core_Helper_Abstract
 			'ZW' => '263'
 		);
 
+        $country = strtoupper($country);
 		if (array_key_exists($country, $country_codes)) {
 			return $country_codes[$country];
 		}
