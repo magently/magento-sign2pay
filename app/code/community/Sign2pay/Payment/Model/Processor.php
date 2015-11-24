@@ -180,7 +180,6 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         if (!$this->_order->getId()) {
             throw new Exception('Requested order with id ' . $orderId . ' does not exists.');
         }
-        $result = array();
 
         if ($this->_verifyResponse($purchaseId)) {
             // Payment was successful, so update the order's state
@@ -191,9 +190,6 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
         } else {
             // Register the payment failure
             $this->_registerPaymentFailure();
-        }
-
-        if (!$result) {
             throw new Exception('Sorry, but we could not process your payment at this time.');
         }
     }

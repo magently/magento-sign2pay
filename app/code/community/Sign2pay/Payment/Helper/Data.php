@@ -199,6 +199,7 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
     public function getSign2PayInitialRequest()
     {
         $options = $this->getPaymentOptions();
+        $quote = $this->getQuote();
 
         $options['client_id']                   = $this->getSign2payClientId();
         $options['redirect_uri']                = $this->getRedirectUri();
