@@ -156,7 +156,7 @@ class Sign2pay_Payment_Helper_Data extends Mage_Core_Helper_Abstract
 
         $telephone = trim($billaddress->getTelephone());
         $telephone = preg_replace('/[^0-9+]/', '', $telephone);
-        $telephone = preg_replace('/^0*/', '+');
+        $telephone = preg_replace('/^0+/', '+', $telephone);
 
         if (substr($telephone, 0, 1) !== '+') {
             $country_code = Mage::helper('sign2pay/countryCodes')->getCountryCallingCode($billaddress->getCountry());
