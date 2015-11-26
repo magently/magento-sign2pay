@@ -9,8 +9,10 @@ Magento extension to add Sign2Pay as payment method.
 This extension allows you to add Sign2Pay to your Magento shop easily.
 
 1. Go to https://github.com/Sign2Pay/magento-sign2pay/releases
-2. Download the latest version as a .tgz file
-3. Follow the [instructions on our documentation website](http://docs.sign2pay.com/integrations/magento/index.html)
+2. Download the latest version as a .tgz file and install
+3. Select Payment Methods from within your Magento Admin
+4. Enter your Sign2Pay Client ID & Client Secret from your client application settings in [merchant.sign2pay.com](https://merchant.sign2pay.com)
+5. Enable Sign2Pay
 
 If you need help, [send us an email](mailto:team@sign2pay.com).
 
