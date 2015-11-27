@@ -74,13 +74,7 @@ class Sign2pay_Payment_PaymentController extends Mage_Core_Controller_Front_Acti
         $session = Mage::getSingleton('checkout/session');
         $session->setQuoteId($session->getSign2payQuoteId(true));
         if ($session->getLastRealOrderId()) {
-            $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
-            if ($order->getId()) {
-                Mage::getModel('sign2pay/processor')->cancel($order);
-            }
             Mage::helper('sign2pay/checkout')->restoreQuote();
-            Mage::getSingleton('checkout/session')->addError("The payment has been cancelled.");
-
         }
         $this->_redirect('checkout/cart');
     }
