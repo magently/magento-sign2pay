@@ -57,8 +57,11 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
             return $this->processPaymentCaptureResponse($payment);
         }
         catch (Exception $e) {
+            Mage::logException($e);
             Mage::getSingleton('checkout/session')->addError($e->getMessage());
-            return Mage::app()->getResponse()->setRedirect('cancel', array('_secure'=>true));
+            
+            $this->cancel();
+            return Mage::app()->getResponse()->setRedirect('failure', array('_secure'=>true));
         }
     }
 
@@ -196,12 +199,11 @@ class Sign2pay_Payment_Model_Processor extends Mage_Payment_Model_Method_Abstrac
 
     /**
      * Cancel the order
-     *
-     * @param Mage_Sales_Model_Order $order
      */
-    public function cancel(Mage_Sales_Model_Order $order)
+    public function cancel()
     {
-        $order->cancel()->save();
+        Mage::helper('sign2pay')->setStatusOnOrder($this->_order, 'Canceled');
+        $this->_order->cancel()->save();
 
         return $this;
     }
